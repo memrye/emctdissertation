@@ -4,7 +4,9 @@ const path = require('path');
 const OpenAI = require('openai');
 const http = require('http');
 const { Server } = require('socket.io');
-const maxAPI = require("max-api");
+
+const isMaxEnvironment = typeof global.maxAPI !== 'undefined';
+const maxAPI = isMaxEnvironment ? require('max-api') : null;
 
 const app = express();
 const server = http.createServer(app);
@@ -68,7 +70,11 @@ app.get('/chatroom', (req, res) => {
 });
 
 function outletToMax(msg) {
-    maxAPI.outlet(msg);
+    if (maxAPI) {
+        maxAPI.outlet(msg);
+    } else {
+        return;
+    }
 };
 
 // Start the server

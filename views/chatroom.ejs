@@ -10,12 +10,18 @@
         display: flex;
         flex-direction: column;
         height: 100vh;
+        background: rgba(202, 192, 199, 0.21);
+        border-radius: 16px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(5.4px) saturate(200%);
+        -webkit-backdrop-filter: blur(5.4px);
     }
     #chat {
         flex: 1;
         padding: 10px;
         overflow-y: auto;
         border-bottom: 1px solid #ccc;
+        background-color: rgba(50,50,50,0.2);
     }
     #message-form {
         display: flex;

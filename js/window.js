@@ -10,13 +10,13 @@ function createWindow(windowType) {
     const closeButton = document.createElement('button');
     closeButton.textContent = '×';
     closeButton.style.cssText = `
+        color: rgb(52, 52, 52);
         position: absolute;
         right: 5px;
         top: 50%;
         transform: translateY(-50%);
         background-color: transparent;
-        border: none;
-        color: white;
+        border: inset rgb(240, 240, 240) 2px;
         font-size: 20px;
         cursor: pointer;
         width: 22px;
@@ -27,18 +27,19 @@ function createWindow(windowType) {
         padding: 0;
         transition: background-color 0.2s;
         writing-mode: vertical-rl;
+        border-radius: 5px;
     `;
     //minimize button
     const minimizeButton = document.createElement('button');
     minimizeButton.textContent = '−';
     minimizeButton.style.cssText = `
+        color: rgb(52, 52, 52);
         position: absolute;
-        right: 27px;
+        right: 30px;
         top: 50%;
         transform: translateY(-50%);
         background-color: transparent;
-        border: none;
-        color: white;
+        border: inset rgb(240, 240, 240) 2px;
         font-size: 20px;
         cursor: pointer;
         width: 22px;
@@ -48,12 +49,13 @@ function createWindow(windowType) {
         justify-content: center;
         padding: 0;
         transition: background-color 0.2s;
+        border-radius: 5px;
     `;
     //window title
     const windowTitle = document.createElement('span');
     windowTitle.textContent = windowType;;
     windowTitle.style.cssText = `
-        color: white;
+        color: rgb(52, 52, 52);
         font-family: monospace, sans-serif;
         position: absolute;
         left: 10px;
@@ -61,6 +63,7 @@ function createWindow(windowType) {
         transform: translateY(-50%);
         font-size: 14px;
     `;
+
     //top of window
     const windowTop = document.createElement('div');
     windowTop.id = `${windowType}WindowTop`;
@@ -68,11 +71,13 @@ function createWindow(windowType) {
         position: absolute;
         width: 600px;
         height: 28px;
-        background-color:rgb(20, 20, 20);
+        background-image: linear-gradient(rgb(255, 255, 255),rgb(173, 173, 173),rgb(173, 173, 173));
         cursor: default;
         user-select: none;
-        border: 10px ridge rgba(0,0,0, .9);
-        border-bottom-width: 5px;
+        border: 2px solid rgb(173, 173, 173);
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        border-bottom-width: 3px;
     `;
     //window base
     const windowBase = document.createElement('div');
@@ -81,11 +86,14 @@ function createWindow(windowType) {
         position: absolute;
         width: 600px;
         height: 400px;
-        background-color:rgb(41, 41, 41);
+        radius: 8px;
+        background-color: transparent;
         user-select: none;
-        transform: translate(0px, 38px); 
-        border: 10px ridge rgba(0,0,0, .9);
+        transform: translate(0px, 33px); 
+        border: 2px solid rgb(173, 173, 173);
         border-top-width: 0px;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
     `;
     //window content
     const iframe = document.createElement('iframe');
@@ -93,8 +101,11 @@ function createWindow(windowType) {
         width: 100%;
         height: 100%;
         border: none;
-        background-color: white;
+        background-color: transparent;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
     `;
+    iframe.allowTransparency = "true";
     //resize handle
     const resizeHandle = document.createElement('div');
     resizeHandle.style.cssText = `
@@ -108,7 +119,7 @@ function createWindow(windowType) {
     `;
     
     if (windowType === 'browser') iframe.src = 'http://localhost:8000/chatroom';
-    if (windowType === 'youtube') iframe.src = 'https://www.youtube.com/embed/g4Hbz2jLxvQ';
+    if (windowType === 'youtube') iframe.src = 'https://www.youtube.com/embed/zm0PguJ4sDg';
 
 
     windowTop.appendChild(minimizeButton);
@@ -128,6 +139,15 @@ function createWindow(windowType) {
     let initialY;
     let xOffset = 0;
     let yOffset = 0;
+    let rafId = null;
+
+    //track mouse position
+    let mouseX = 0;
+    let mouseY = 0;
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
 
     // mouse event listeners
     windowTop.addEventListener('mousedown', startDragging);
@@ -136,7 +156,7 @@ function createWindow(windowType) {
 
     // close button hover listeners
     closeButton.addEventListener('mouseover', () => {
-        closeButton.style.backgroundColor = 'rgba(255, 0, 0, 0.8)';
+        closeButton.style.backgroundColor = 'rgba(255, 0, 0, 0.5)';
     });
 
     closeButton.addEventListener('mouseout', () => {
@@ -147,6 +167,13 @@ function createWindow(windowType) {
     closeButton.addEventListener('click', () => {
         const closeWindowEvent = new CustomEvent(`closeWindow_${windowType}`);
         document.dispatchEvent(closeWindowEvent);
+        if (rafId) {
+            cancelAnimationFrame(rafId);
+        }
+        document.removeEventListener('mousemove', drag);
+        document.removeEventListener('mouseup', stopDragging);
+        document.removeEventListener('mousemove', resize);
+        document.removeEventListener('mouseup', stopResizing);
         windowBase.remove();
         windowTop.remove();
     });
@@ -156,37 +183,53 @@ function createWindow(windowType) {
     function startDragging(e) {
         initialX = e.clientX - xOffset;
         initialY = e.clientY - yOffset;
-
-        if (e.target === windowTop || e.target === windowTitle) {
+        if ((e.target === windowTop || e.target === windowTitle) && !isDragging) {
             isDragging = true;
-        }   
-    }
-
-    function drag(e) {
-        if (isDragging) {
             windowTop.style.cursor = 'grabbing';
-            e.preventDefault();
+            rafId = requestAnimationFrame(updatePosition);
+        }  
+    }
+    
+    function updatePosition() {
+        if (isDragging) {
+            currentX = mouseX - initialX;
+            currentY = mouseY - initialY;
+
+            const maxX = window.innerWidth - windowTop.offsetWidth;
+            const maxY = window.innerHeight - windowTop.offsetHeight;
             
-            currentX = e.clientX - initialX;
-            currentY = e.clientY - initialY;
+            currentX = Math.max(0, Math.min(currentX, maxX));
+            currentY = Math.max(0, Math.min(currentY, maxY));
 
             xOffset = currentX;
             yOffset = currentY;
 
             setDivPosition(currentX, currentY);
+            rafId = requestAnimationFrame(updatePosition);
+        }
+    }
+
+    function drag(e) {
+        if (isDragging) {
+            e.preventDefault();
         }
     }
 
     function stopDragging() {
-        windowTop.style.cursor = 'default';
-        initialX = currentX;
-        initialY = currentY;
-        isDragging = false;
+        if (isDragging) {
+            windowTop.style.cursor = 'default';
+            initialX = currentX;
+            initialY = currentY;
+            isDragging = false;
+            if (rafId) {
+                cancelAnimationFrame(rafId);
+            }
+        }
     }
 
     // minimize button hover listeners
     minimizeButton.addEventListener('mouseover', () => {
-        minimizeButton.style.backgroundColor = 'rgba(128, 128, 128, 0.8)';
+        minimizeButton.style.backgroundColor = 'rgba(80, 80, 80, 0.2)';
     });
 
     minimizeButton.addEventListener('mouseout', () => {
@@ -197,7 +240,7 @@ function createWindow(windowType) {
     minimizeButton.addEventListener('click', minimizeWindow);
 
     function setDivPosition(xPos, yPos) {
-        const yOff = parseInt(windowTop.style.height) + parseInt(windowTop.style.borderTopWidth);
+        const yOff = parseInt(windowTop.style.height) + parseInt(windowTop.style.borderTopWidth) + parseInt(windowBase.style.borderBottomWidth);
         windowTop.style.transform = `translate(${xPos}px, ${yPos}px)`;
         windowBase.style.transform = `translate(${xPos}px, ${yPos + yOff}px)`;
     }
@@ -217,33 +260,45 @@ function createWindow(windowType) {
         initialY = e.clientY;
         initialWidth = parseInt(windowBase.style.width);
         initialHeight = parseInt(windowBase.style.height);
-
         e.stopPropagation();
+        rafId = requestAnimationFrame(updateResize);
     }
 
-    function resize(e){
+    function updateResize(e){
+        if (isResizing) {
+            const deltaX = mouseX - initialX;
+            const deltaY = mouseY - initialY;
+
+            const newWidth = Math.max(300, initialWidth + deltaX);
+            const newHeight = Math.max(200, initialHeight + deltaY);
+
+            const maxWidth = window.innerWidth - xOffset;
+            const maxHeight = window.innerHeight - yOffset;
+
+            const clampedWidth = Math.min(newWidth, maxWidth);
+            const clampedHeight = Math.min(newHeight, maxHeight);
+
+            windowBase.style.width = `${clampedWidth}px`;
+            windowTop.style.width = `${clampedWidth}px`;
+            windowBase.style.height = `${clampedHeight}px`;
+
+            rafId = requestAnimationFrame(updateResize);
+        }
+    }
+
+    function resize(e) {
         if (isResizing) {
             e.preventDefault();
-
-            const newWidth = initialWidth + (e.clientX - initialX);
-            const newHeight = initialHeight + (e.clientY - initialY);
-
-            const minWidth = 300;
-            const minHeight = 200;
-
-            if (newWidth > minWidth) {
-                windowBase.style.width = `${newWidth}px`;
-                windowTop.style.width = `${newWidth}px`;
-            }
-
-            if (newHeight > minHeight) {
-                windowBase.style.height = `${newHeight}px`;
-            }
         }
     }
 
     function stopResizing() {
-        isResizing = false;
+        if (isResizing) {
+            isResizing = false;
+            if (rafId) {
+                cancelAnimationFrame(rafId);
+            }
+        }
     }
 
     //minimize window listener

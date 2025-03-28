@@ -77,7 +77,7 @@ function createTaskbar() {
         left: 0;
         width: 100%;
         height: 60px;
-        background-color: rgba(30, 30, 30, 0.8);
+        background-image: linear-gradient(rgb(248, 248, 248), rgb(200, 200, 200),rgb(185, 185, 185));
         display: flex;
         align-items: center;
         padding: 0 10px;
@@ -100,7 +100,7 @@ function addTaskbarButton(windowType) {
         background: url('./images/${windowType}.png') no-repeat;
         background-size: 45px;
         background-position: center;
-        border: 1px solid rgba(80, 80, 80, 0.8);
+        border: inset rgb(240, 240, 240) 2px;
         color: white;
         cursor: pointer;
         border-radius: 3px;
@@ -110,7 +110,7 @@ function addTaskbarButton(windowType) {
 
     // Add hover effect
     taskButton.addEventListener('mouseover', () => {
-        taskButton.style.backgroundColor = 'rgba(80, 80, 80, 0.8)';
+        taskButton.style.backgroundColor = 'rgba(80, 80, 80, 0.2)';
     });
 
     taskButton.addEventListener('mouseout', () => {
