@@ -1,11 +1,15 @@
-document.addEventListener('createNewWindow_browser', () => {
-    createWindow('browser'); 
+import { getWindowConfigs } from './configManager.js';
+const configs = await getWindowConfigs();
+
+document.addEventListener('createNewWindow_chatroom', () => {
+    createWindow('chatroom', configs.chatroom); 
 });
 document.addEventListener('createNewWindow_youtube', () => {
-    createWindow('youtube'); 
+    createWindow('youtube', configs.youtube); 
 });
 
-function createWindow(windowType) {
+function createWindow(windowType, config) {
+
     //close button
     const closeButton = document.createElement('button');
     closeButton.textContent = '×';
@@ -53,7 +57,7 @@ function createWindow(windowType) {
     `;
     //window title
     const windowTitle = document.createElement('span');
-    windowTitle.textContent = windowType;;
+    windowTitle.textContent = config.title;
     windowTitle.style.cssText = `
         color: rgb(52, 52, 52);
         font-family: monospace, sans-serif;
@@ -62,6 +66,11 @@ function createWindow(windowType) {
         top: 50%;
         transform: translateY(-50%);
         font-size: 14px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        width: calc(100% - 70px);
+        padding-right: 10px;
     `;
 
     //top of window
@@ -69,7 +78,7 @@ function createWindow(windowType) {
     windowTop.id = `${windowType}WindowTop`;
     windowTop.style.cssText = `
         position: absolute;
-        width: 600px;
+        width: ${config.defaultWidth}px;
         height: 28px;
         background-image: linear-gradient(rgb(255, 255, 255),rgb(173, 173, 173),rgb(173, 173, 173));
         cursor: default;
@@ -78,14 +87,15 @@ function createWindow(windowType) {
         border-top-left-radius: 8px;
         border-top-right-radius: 8px;
         border-bottom-width: 3px;
+        box-shadow: 0px 0px 11px 0px rgba(0,0,0,0.5);
     `;
     //window base
     const windowBase = document.createElement('div');
     windowBase.id = `${windowType}WindowBase`;
     windowBase.style.cssText = `
         position: absolute;
-        width: 600px;
-        height: 400px;
+        width: ${config.defaultWidth}px;
+        height: ${config.defaultHeight}px;
         radius: 8px;
         background-color: transparent;
         user-select: none;
@@ -94,9 +104,11 @@ function createWindow(windowType) {
         border-top-width: 0px;
         border-bottom-left-radius: 8px;
         border-bottom-right-radius: 8px;
+        box-shadow: 0px 0px 11px 0px rgba(0,0,0,0.5);
     `;
     //window content
     const iframe = document.createElement('iframe');
+    iframe.src = config.content;
     iframe.style.cssText = `
         width: 100%;
         height: 100%;
@@ -118,9 +130,6 @@ function createWindow(windowType) {
         background: transparent;
     `;
     
-    if (windowType === 'browser') iframe.src = 'http://localhost:8000/chatroom';
-    if (windowType === 'youtube') iframe.src = 'https://www.youtube.com/embed/zm0PguJ4sDg';
-
 
     windowTop.appendChild(minimizeButton);
     windowTop.appendChild(closeButton);
@@ -270,7 +279,7 @@ function createWindow(windowType) {
             const deltaY = mouseY - initialY;
 
             const newWidth = Math.max(300, initialWidth + deltaX);
-            const newHeight = Math.max(200, initialHeight + deltaY);
+            const newHeight = Math.max(300, initialHeight + deltaY);
 
             const maxWidth = window.innerWidth - xOffset;
             const maxHeight = window.innerHeight - yOffset;

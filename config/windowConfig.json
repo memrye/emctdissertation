@@ -1,0 +1,16 @@
+{
+    "chatroom": {
+        "title": "chatroom - refresh to meet someone new!",
+        "icon": "./images/chat.png",
+        "content": "http://localhost:8000/chatroom",
+        "defaultWidth": 370,
+        "defaultHeight": 500
+    },
+    "youtube": {
+        "title": "youtube",
+        "icon": "./images/youtube.png",
+        "content": "https://www.youtube.com/embed/zm0PguJ4sDg",
+        "defaultWidth": 800,
+        "defaultHeight": 450
+    }
+}

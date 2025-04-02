@@ -1,14 +1,25 @@
+import { getWindowConfigs } from './configManager.js';
 const openWindows = [];
+
+// Load configurations
+getWindowConfigs().then(configs => {
+    // Create initial desktop icons
+    createDesktopIcon('chatroom', 0, 0);
+    createDesktopIcon('youtube', 0, 1);
+}).catch(error => console.error('Error initializing desktop:', error));
+
 
 document.addEventListener('DOMContentLoaded', () => {
     createTaskbar();
-    createDesktopIcon('browser',0,0);
-    createDesktopIcon('youtube',0,1);
 });
 
+async function createDesktopIcon(buttonType, xOff, yOff) {
+    const config = (await getWindowConfigs())[buttonType];
+    if (!config) {
+        console.error(`No config found for button type: ${buttonType}`);
+        return;
+    }
 
-function createDesktopIcon(buttonType, xOff, yOff) {
-    
     //check if window is already open
     if (openWindows.includes(buttonType)) return;
 
@@ -26,7 +37,7 @@ function createDesktopIcon(buttonType, xOff, yOff) {
         cursor: pointer;
         font-family: monospace, sans-serif;
         transition: background-color 0.2s;
-        background: url('./images/${buttonType}.png') no-repeat;
+        background: url('${config.icon}') no-repeat;
         background-size: 50px;
         background-position: center top 5px;
         padding-top: 50px;
@@ -88,7 +99,8 @@ function createTaskbar() {
 
 //CREATE TASKBAR BUTTON *****************************************
 
-function addTaskbarButton(windowType) {
+async function addTaskbarButton(windowType) {
+    const config = (await getWindowConfigs())[windowType];
     const taskbar = document.getElementById('taskbar');
     const taskButton = document.createElement('button');
     //taskButton.textContent = windowType;
@@ -97,7 +109,7 @@ function addTaskbarButton(windowType) {
         height: 50px;
         width: 80px;
         padding: 0 15px;
-        background: url('./images/${windowType}.png') no-repeat;
+        background: url('${config.icon}') no-repeat;
         background-size: 45px;
         background-position: center;
         border: inset rgb(240, 240, 240) 2px;

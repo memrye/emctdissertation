@@ -4,9 +4,7 @@ const path = require('path');
 const OpenAI = require('openai');
 const http = require('http');
 const { Server } = require('socket.io');
-
-const isMaxEnvironment = typeof global.maxAPI !== 'undefined';
-const maxAPI = isMaxEnvironment ? require('max-api') : null;
+//const maxAPI = require("max-api");
 
 const app = express();
 const server = http.createServer(app);
@@ -14,24 +12,33 @@ const io = new Server(server);
 const port = 8000;
 
 const openai = new OpenAI({
-    apiKey: process.env['OPENAI_API_KEY'],
+    apiKey: process.env.GROQ_API_KEY,
+    baseURL: "https://api.groq.com/openai/v1"
 });
 
 app.use(express.static(path.join(__dirname)));
 app.set('view engine', 'ejs');
 
-//get chat response from OpenAI
-async function getResponse(userMessage) {
+const { chatUsers } = require('./config/chatUsers.js');
+const { userInfo } = require('os');
+
+//get chat response from llama through groq api
+async function getResponse(userMessage, userPrompt) {
     const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "llama3-70b-8192", 
         messages: [
-            { role: "developer", content: "You are a 2000s internet user in a chatroom. Keep responses brief (one sentence at most) and make use of lowercase and occasional internet acronyms. Do not use emojis and intead use kaomojis or emoticons on occasion" },
+            { 
+                role: "system", 
+                content: userPrompt
+            },
             {
                 role: "user",
                 content: userMessage,
             },
         ],
-        store: true,
+        temperature: 0.7,
+        max_tokens: 100,
+        stream: false,
     });
     return completion.choices[0].message.content;
 }
@@ -39,17 +46,23 @@ async function getResponse(userMessage) {
 io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
 
-    // Listen for chat messages
+    const randomUser = chatUsers[Math.floor(Math.random() * chatUsers.length)];
+    socket.emit('assigned user', randomUser);
+
+    // listen for chat messages
     socket.on('chat message', async (msg) => {
-        //console.log('Message from user:', msg);
         outletToMax(`user "${msg}"`);
         io.emit('chat message', { user: 'You', message: msg });
 
-        const fakeUserResponse = await getResponse(msg);
+        const response = await getResponse(msg, randomUser.prompt);
         setTimeout(() => {
-            io.emit('chat message', { user: 'messenger', message: fakeUserResponse });
-            outletToMax(`messenger "${fakeUserResponse}"`);
-        }, 1000);
+            io.emit('chat message', { 
+                user: randomUser.username, 
+                message: response 
+            });
+            outletToMax(`messenge_in "${response}"`);
+            console.log(String(response).length * 40)
+        }, String(response).length * 150);
     });
 
     // Handle disconnects
@@ -57,7 +70,6 @@ io.on('connection', (socket) => {
         console.log('A user disconnected:', socket.id);
     });
 });
-
 
 
 
@@ -70,7 +82,7 @@ app.get('/chatroom', (req, res) => {
 });
 
 function outletToMax(msg) {
-    if (maxAPI) {
+    if (typeof(maxAPI) !== 'undefined') {
         maxAPI.outlet(msg);
     } else {
         return;
