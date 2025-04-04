@@ -4,7 +4,7 @@ const path = require('path');
 const OpenAI = require('openai');
 const http = require('http');
 const { Server } = require('socket.io');
-//const maxAPI = require("max-api");
+const maxAPI = require("max-api");
 
 const app = express();
 const server = http.createServer(app);
@@ -19,8 +19,7 @@ const openai = new OpenAI({
 app.use(express.static(path.join(__dirname)));
 app.set('view engine', 'ejs');
 
-const { chatUsers } = require('./config/chatUsers.js');
-const { userInfo } = require('os');
+const { chatUsers } = require('./config/chatUsers');
 
 //get chat response from llama through groq api
 async function getResponse(userMessage, userPrompt) {

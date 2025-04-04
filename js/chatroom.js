@@ -31,18 +31,34 @@ document.addEventListener('DOMContentLoaded', () => {
     // profile image container
     const profileImageContainer = document.createElement('div');
     profileImageContainer.style.cssText = `
-        position: fixed;
+        position: relative;
         width: 104px;
         height: 104px;
-        left: 6%;
-        top: 6%;
+        left: 8%;
+        top: 8%;
         background-size: cover;
         background-position: center;
         box-shadow: inset 0px 0px 11px 0px rgba(0,0,0,0.5);
         box-shadow: 0px 0px 11px 0px rgba(0,0,0,0.5);
         border-radius: 50% / 10%;
-        border: thick double rgba(255, 255, 255, 0.5);
+        border: thick solid rgba(255, 255, 255, 0.4);
+        border-width: 3px;
+        outline: double rgba(255, 255, 255, 0.2);
+        outline-width: 3px;
+        outline-offset: -3px;
+        overflow: hidden;
     `;
+    // highlight overlay
+    const highlightOverlay = document.createElement('div');
+    highlightOverlay.style.cssText = `
+        position: absolute;
+        width: 300%;
+        height: 130%;
+        top: -80%;
+        left: -100%;
+        background: radial-gradient(circle,rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0) 100%);
+    `;
+    profileImageContainer.appendChild(highlightOverlay);
     profile.appendChild(profileImageContainer);
 
     // username

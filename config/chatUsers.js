@@ -1,4 +1,4 @@
-export const chatUsers = [
+const chatUsers = [
     {
         username: "sk8ter_dude",
         profile_image: "./images/fred.jpg",
@@ -10,3 +10,5 @@ export const chatUsers = [
         prompt: "You are a chatroom user from the 2000s. You're a girl who's into anime and coding websites. Use '^^' and ':3' emoticons frequently. You must type authentically and keep responses brief (one sentence maximum)"
     }
 ];
+
+module.exports = { chatUsers };

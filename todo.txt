@@ -1,10 +1,11 @@
 [X] store window information in json file
 - [] default position + size per window
 
-[] implement multiple chats user can choose between
-- [] randomise message response time / add fake "typing.." status
-- [] create "users" with usernames (pfps?) and gpt prompts 
+[X] randomise message response time / add fake "typing.." status
+- [X] create "users" with usernames (pfps?) and gpt prompts 
 
 [X] use groq ai interface instead of chatgpt
 
 [] add sign-in / out function
+
+[] fix z index so focused window always has higher z index
