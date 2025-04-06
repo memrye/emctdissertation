@@ -3,8 +3,9 @@ const express = require('express');
 const path = require('path');
 const OpenAI = require('openai');
 const http = require('http');
+const fs = require('fs').promises;
 const { Server } = require('socket.io');
-const maxAPI = require("max-api");
+//const maxAPI = require("max-api");
 
 const app = express();
 const server = http.createServer(app);
@@ -60,8 +61,11 @@ io.on('connection', (socket) => {
                 message: response 
             });
             outletToMax(`messenge_in "${response}"`);
-            console.log(String(response).length * 40)
-        }, String(response).length * 150);
+        }, String(response).length * 50);
+    });
+
+    socket.on('keydown', (key) => {
+        outletToMax(`key "${key}"`);
     });
 
     // Handle disconnects
@@ -80,11 +84,33 @@ app.get('/chatroom', (req, res) => {
     res.render('chatroom');
 });
 
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+
+app.post('/login', (req, res) => {
+    res.redirect('/');
+});
+
+app.get('/api/avatars', async (req, res) => {
+    try {
+        const avatarPath = path.join(__dirname, 'images', 'avatars');
+        const files = await fs.readdir(avatarPath);
+        const avatars = files.filter(file => 
+            ['.jpg', '.jpeg', '.png', '.gif', '.bmp'].includes(path.extname(file).toLowerCase())
+        );
+        res.json(avatars);
+    } catch (error) {
+        console.error('Error reading avatar directory:', error);
+        res.status(500).json({ error: 'Failed to load avatars' });
+    }
+});
+
 function outletToMax(msg) {
     if (typeof(maxAPI) !== 'undefined') {
         maxAPI.outlet(msg);
     } else {
-        return;
+        console.log(msg);
     }
 };
 

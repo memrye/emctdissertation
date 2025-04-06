@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>hello world</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        body {
+            background-image: radial-gradient(rgb(104, 137, 199), rgb(55, 95, 170),rgb(49, 80, 136));
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+        .swish {
+            height: 250vh;
+            width: 40vw;
+            background-color: transparent;
+            border-left: 2px solid rgba(104, 137, 199, 0.5);
+            position: absolute;
+            border-radius: 50%;
+            display: inline-block;
+            transform-origin: center;
+            box-shadow: inset 0px 0px 7px 0px rgba(255, 255, 255, 0.3);
+            clip-path: ellipse(25% 50% at left center);
+        }
+
+        #swish {
+            top: -30vh;
+            right: 20vw;
+            transform: rotate(70deg);
+        }
+
+        #swish2 {
+            top: -30vh;
+            right: 19vw;
+            transform: rotate(68deg);
+        }
+
+        #swish3 {
+            top: -30vh;
+            right: 19vw;
+            transform: rotate(71deg);
+        }
+        .login-container {
+            position: flex;
+            width: 300px;
+            padding: 10px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            background: linear-gradient(rgba(230, 223, 255, 0.21),transparent,transparent,transparent);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(5.4px);
+            border-radius: 10px;
+            outline: 1px solid rgba(255, 255, 255, 0.21);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            z-index: 1000;
+            flex-direction: column;
+        }
+
+
+        .login-container p {
+            text-align: left;
+            left: 6%;
+            position: relative;
+            font-size: 14px;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+            margin-top: 0px;
+            margin-bottom: 2px;
+            text-shadow:0 0 5px rgba(255,255,255,0.5);
+            user-select: none
+        }
+
+        .login-container input {
+            width: 85%;
+            padding: 7px;
+            margin-bottom: 3%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.05);
+            color: rgb(255, 255, 255);
+            box-shadow: inset 0 0.4px 1px rgba(0, 0, 0, 0.3);
+            text-shadow:0 0 5px rgba(255,255,255,0.5);
+        }
+
+        .login-container button {
+            width: 90%;
+            padding: 7px;
+            margin-top: 3%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            background: rgba(0, 0, 0, 0.05);
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: inset 0 0.4px 1px rgba(0, 0, 0, 0.3);
+            text-shadow:0 0 5px rgba(255,255,255,0.3);
+        }
+
+        .login-container button:hover {
+            box-shadow: inset 0 0.4px 3px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+            text-shadow:0 0 5px rgba(255,255,255,0.9);
+        }
+
+        .login-container button:active {
+            box-shadow: inset 0 0.4px 0.5px rgba(0, 0, 0, 0);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .avatar-container {
+            margin: 0 5%;
+            right: 20px;
+            width: 83%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 0.4px 1px rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.05);
+            height: auto;
+            border-radius: 10px;
+            overflow: auto;
+            white-space: nowrap;
+            padding:10px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+            user-select: none;
+            scroll-behavior: smooth;
+        }
+
+        .profile-image {
+            display: inline-block;
+            height: 60px;
+            width: 60px;
+            margin-right: 10px;
+            border-radius: 50% / 10%;
+            background: linear-gradient(rgba(230, 223, 255, 0.21), transparent);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(5.4px);
+            outline: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .profile-imagecontainer{
+            height: 60px;
+            width: 60px;
+            border-radius: 50% / 10%;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            outline: 2px solid rgba(255, 255, 255, 0.18);
+            outline-offset: -1px;
+            cursor: pointer;
+            transform: scale(0.8);
+            
+        }
+
+        .profile-image:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);;
+        }
+
+        .profile-image.selected {
+            transform: scale(1.1);
+            background: linear-gradient(rgba(255, 255, 255, 0.45), rgba(246, 244, 255, 0.2));
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        h2 {
+            position: flex;
+            text-align: left;
+            font-size: 50px;
+            top: -1%;
+            position: relative;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+            margin-bottom: 6px;
+            margin-top: 0px;
+            text-shadow:0 0 5px rgba(255,255,255,0.5);
+            user-select: none
+        }
+    </style>
+</head>
+<body>
+    <span class="swish" id="swish"></span>
+    <span class="swish" id="swish2"></span>
+    <span class="swish" id="swish3"></span>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/loginBackground"></script>
+
+    <h2>Welcome!</h2>
+    <div class="login-container">
+        <p>Hello, I'm...</p>
+        <form action="/login" method="POST">
+            <input type="text" name="username" autocomplete="off" required>
+            <input type="hidden" name="selectedAvatar" id="selectedAvatar">
+            <div class="avatar-container" id="avatar-container">
+
+            </div>
+            <button type="submit">sign in</button>
+        </form>
+    </div>
+
+    <script src="/js/login.js"></script>
+</body>
+</html>

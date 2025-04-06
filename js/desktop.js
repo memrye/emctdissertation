@@ -88,12 +88,51 @@ function createTaskbar() {
         left: 0;
         width: 100%;
         height: 60px;
-        background-image: linear-gradient(rgb(248, 248, 248), rgb(200, 200, 200),rgb(185, 185, 185));
         display: flex;
         align-items: center;
+        justify-content: space-between;
         padding: 0 10px;
-        gap: 5px;
+        background: linear-gradient(rgba(230, 223, 255, 0.21),transparent,transparent,transparent);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(5.4px);
+        outline: 1px solid rgba(255, 255, 255, 0.21);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     `;
+    const buttonContainer = document.createElement('div');
+    buttonContainer.id = 'taskbar-buttons';
+    buttonContainer.style.cssText = `
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        flex-grow: 1;
+    `;
+    const datewidget = document.createElement('div');
+    datewidget.id = 'datewidget';
+    datewidget.style.cssText = `
+        line-height: 3;
+        color: white;  
+        font-family: monospace, sans-serif;
+        padding: 0 30px;
+        white-space: nowrap;
+        height: 100%;
+        text-align: center;
+        border-left: 1px solid rgba(255, 255, 255, 0.18);
+        user-select: none
+    `; 
+ 
+    function updateTime() {
+        datewidget.textContent = new Date().toLocaleString('en-GB', {
+            timeZone: '+01:00',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+        });
+    }
+    updateTime();
+    setInterval(updateTime, 1000);
+
+    taskbar.appendChild(buttonContainer);
+    taskbar.appendChild(datewidget);
     document.body.appendChild(taskbar);
 }
 
@@ -101,6 +140,7 @@ function createTaskbar() {
 
 async function addTaskbarButton(windowType) {
     const config = (await getWindowConfigs())[windowType];
+    const buttonContainer = document.getElementById('taskbar-buttons');
     const taskbar = document.getElementById('taskbar');
     const taskButton = document.createElement('button');
     //taskButton.textContent = windowType;
@@ -112,17 +152,31 @@ async function addTaskbarButton(windowType) {
         background: url('${config.icon}') no-repeat;
         background-size: 45px;
         background-position: center;
-        border: inset rgb(240, 240, 240) 2px;
-        color: white;
         cursor: pointer;
         border-radius: 3px;
-        font-family: monospace, sans-serif;
         transition: background-color 0.2s;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0.05);
+        box-shadow: inset 0 0.4px 1px rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
     `;
+
+    const taskButtonImage = document.createElement('img');
+    taskButtonImage.src = config.icon;
+    taskButtonImage.style.cssText = `
+        width: 80%;
+        height: 80%;
+        vertical-align: middle;
+    `;
+    taskButton.appendChild(taskButtonImage);
+
 
     // Add hover effect
     taskButton.addEventListener('mouseover', () => {
-        taskButton.style.backgroundColor = 'rgba(80, 80, 80, 0.2)';
+        taskButton.style.backgroundColor = 'rgba(165, 165, 165, 0.2)';
     });
 
     taskButton.addEventListener('mouseout', () => {
@@ -134,7 +188,7 @@ async function addTaskbarButton(windowType) {
         document.dispatchEvent(minimizeEvent);
     });
 
-    taskbar.appendChild(taskButton);
+    buttonContainer.appendChild(taskButton);
 }
 
 //REMOVE TASKBAR BUTTON *****************************************

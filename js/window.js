@@ -8,19 +8,21 @@ document.addEventListener('createNewWindow_youtube', () => {
     createWindow('youtube', configs.youtube); 
 });
 
+window.zCounter = 1; 
+
 function createWindow(windowType, config) {
 
     //close button
     const closeButton = document.createElement('button');
     closeButton.textContent = '×';
     closeButton.style.cssText = `
-        color: rgb(52, 52, 52);
+        color: rgb(255, 255, 255);
         position: absolute;
         right: 5px;
         top: 50%;
         transform: translateY(-50%);
         background-color: transparent;
-        border: inset rgb(240, 240, 240) 2px;
+        border: inset rgba(240, 240, 240, 0.2) 1px;
         font-size: 20px;
         cursor: pointer;
         width: 22px;
@@ -37,13 +39,13 @@ function createWindow(windowType, config) {
     const minimizeButton = document.createElement('button');
     minimizeButton.textContent = '−';
     minimizeButton.style.cssText = `
-        color: rgb(52, 52, 52);
+        color: rgb(255, 255, 255);
         position: absolute;
         right: 30px;
         top: 50%;
         transform: translateY(-50%);
         background-color: transparent;
-        border: inset rgb(240, 240, 240) 2px;
+        border: inset rgba(240, 240, 240, 0.2) 1px;
         font-size: 20px;
         cursor: pointer;
         width: 22px;
@@ -59,7 +61,7 @@ function createWindow(windowType, config) {
     const windowTitle = document.createElement('span');
     windowTitle.textContent = config.title;
     windowTitle.style.cssText = `
-        color: rgb(52, 52, 52);
+        color: rgb(255, 255, 255);
         font-family: monospace, sans-serif;
         position: absolute;
         left: 10px;
@@ -80,14 +82,17 @@ function createWindow(windowType, config) {
         position: absolute;
         width: ${config.defaultWidth}px;
         height: 28px;
-        background-image: linear-gradient(rgb(255, 255, 255),rgb(173, 173, 173),rgb(173, 173, 173));
+        background-image: linear-gradient(rgba(255, 255, 255, 0.5),rgba(110, 110, 110, 0.5),rgba(110, 110, 110, 0.5));
+        backdrop-filter: blur(7px) saturate(200%) brightness(0.7);
+        -webkit-backdrop-filter: blur(5.4px);
         cursor: default;
         user-select: none;
-        border: 2px solid rgb(173, 173, 173);
+        border: 1px solid rgba(255, 255, 255, 0.18);
         border-top-left-radius: 8px;
         border-top-right-radius: 8px;
-        border-bottom-width: 3px;
+        border-bottom-color: rgba(17, 17, 17, 0.38);
         box-shadow: 0px 0px 11px 0px rgba(0,0,0,0.5);
+        box-shadow: inset 0px 0px 11px 0px rgba(0,0,0,0.5);
     `;
     //window base
     const windowBase = document.createElement('div');
@@ -99,8 +104,8 @@ function createWindow(windowType, config) {
         radius: 8px;
         background-color: transparent;
         user-select: none;
-        transform: translate(0px, 33px); 
-        border: 2px solid rgb(173, 173, 173);
+        transform: translate(0px, 30px); 
+        border: 1px solid rgba(255, 255, 255, 0.18);
         border-top-width: 0px;
         border-bottom-left-radius: 8px;
         border-bottom-right-radius: 8px;
@@ -192,6 +197,10 @@ function createWindow(windowType, config) {
     function startDragging(e) {
         initialX = e.clientX - xOffset;
         initialY = e.clientY - yOffset;
+
+        const kurwa = ++window.zCounter;
+        windowTop.style.zIndex =  kurwa;  
+        windowBase.style.zIndex = kurwa;
         if ((e.target === windowTop || e.target === windowTitle) && !isDragging) {
             isDragging = true;
             windowTop.style.cursor = 'grabbing';
@@ -205,7 +214,7 @@ function createWindow(windowType, config) {
             currentY = mouseY - initialY;
 
             const maxX = window.innerWidth - windowTop.offsetWidth;
-            const maxY = window.innerHeight - windowTop.offsetHeight;
+            const maxY = window.innerHeight - (windowTop.offsetHeight + windowBase.offsetHeight); 
             
             currentX = Math.max(0, Math.min(currentX, maxX));
             currentY = Math.max(0, Math.min(currentY, maxY));
@@ -238,7 +247,7 @@ function createWindow(windowType, config) {
 
     // minimize button hover listeners
     minimizeButton.addEventListener('mouseover', () => {
-        minimizeButton.style.backgroundColor = 'rgba(80, 80, 80, 0.2)';
+        minimizeButton.style.backgroundColor = 'rgba(223, 223, 223, 0.2)';
     });
 
     minimizeButton.addEventListener('mouseout', () => {
@@ -286,6 +295,10 @@ function createWindow(windowType, config) {
 
             const clampedWidth = Math.min(newWidth, maxWidth);
             const clampedHeight = Math.min(newHeight, maxHeight);
+
+            const kurwa = ++window.zCounter;
+            windowTop.style.zIndex =  kurwa;  
+            windowBase.style.zIndex = kurwa;
 
             windowBase.style.width = `${clampedWidth}px`;
             windowTop.style.width = `${clampedWidth}px`;
