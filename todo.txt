@@ -12,4 +12,8 @@
 
 [X] fix z index so focused window always has higher z index
 
-[] add current time to taskbar
+[X] add current time to taskbar
+
+[] fix/redesign chatroom
+
+[] refactor to allow user to change colour and add option to login bar

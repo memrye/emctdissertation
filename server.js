@@ -5,6 +5,7 @@ const OpenAI = require('openai');
 const http = require('http');
 const fs = require('fs').promises;
 const { Server } = require('socket.io');
+const cookieParser = require('cookie-parser');
 //const maxAPI = require("max-api");
 
 const app = express();
@@ -18,6 +19,8 @@ const openai = new OpenAI({
 });
 
 app.use(express.static(path.join(__dirname)));
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 
 const { chatUsers } = require('./config/chatUsers');
@@ -44,7 +47,6 @@ async function getResponse(userMessage, userPrompt) {
 }
 
 io.on('connection', (socket) => {
-    console.log('A user connected:', socket.id);
 
     const randomUser = chatUsers[Math.floor(Math.random() * chatUsers.length)];
     socket.emit('assigned user', randomUser);
@@ -70,7 +72,7 @@ io.on('connection', (socket) => {
 
     // Handle disconnects
     socket.on('disconnect', () => {
-        console.log('A user disconnected:', socket.id);
+
     });
 });
 
@@ -89,7 +91,19 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
+    const userData = {
+        username: req.body.username,
+        avatar: req.body.selectedAvatar,
+    };
+
+    res.cookie('userData', JSON.stringify(userData), { maxAge: 900000, httpOnly: false });
+
     res.redirect('/');
+});
+
+app.get('/logout', (req, res) => {
+    res.clearCookie('userData');
+    res.redirect('/login');
 });
 
 app.get('/api/avatars', async (req, res) => {
@@ -106,6 +120,11 @@ app.get('/api/avatars', async (req, res) => {
     }
 });
 
+app.get('/api/user', (req, res) => {
+    const userData = req.cookies.userData;
+    res.json(userData ? JSON.parse(userData) : null);
+});
+
 function outletToMax(msg) {
     if (typeof(maxAPI) !== 'undefined') {
         maxAPI.outlet(msg);
@@ -116,5 +135,5 @@ function outletToMax(msg) {
 
 // Start the server
 server.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Server is running on http://localhost:${port}/login`);
 });

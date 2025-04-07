@@ -12,105 +12,29 @@ window.zCounter = 1;
 
 function createWindow(windowType, config) {
 
-    //close button
     const closeButton = document.createElement('button');
     closeButton.textContent = '×';
-    closeButton.style.cssText = `
-        color: rgb(255, 255, 255);
-        position: absolute;
-        right: 5px;
-        top: 50%;
-        transform: translateY(-50%);
-        background-color: transparent;
-        border: inset rgba(240, 240, 240, 0.2) 1px;
-        font-size: 20px;
-        cursor: pointer;
-        width: 22px;
-        height: 22px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-        transition: background-color 0.2s;
-        writing-mode: vertical-rl;
-        border-radius: 5px;
-    `;
-    //minimize button
+    closeButton.className = 'window-button window-close';
+
     const minimizeButton = document.createElement('button');
     minimizeButton.textContent = '−';
-    minimizeButton.style.cssText = `
-        color: rgb(255, 255, 255);
-        position: absolute;
-        right: 30px;
-        top: 50%;
-        transform: translateY(-50%);
-        background-color: transparent;
-        border: inset rgba(240, 240, 240, 0.2) 1px;
-        font-size: 20px;
-        cursor: pointer;
-        width: 22px;
-        height: 22px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-        transition: background-color 0.2s;
-        border-radius: 5px;
-    `;
-    //window title
+    minimizeButton.className = 'window-button window-minimize';
+
     const windowTitle = document.createElement('span');
     windowTitle.textContent = config.title;
-    windowTitle.style.cssText = `
-        color: rgb(255, 255, 255);
-        font-family: monospace, sans-serif;
-        position: absolute;
-        left: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 14px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-        width: calc(100% - 70px);
-        padding-right: 10px;
-    `;
+    windowTitle.className = 'window-title';
 
-    //top of window
     const windowTop = document.createElement('div');
     windowTop.id = `${windowType}WindowTop`;
-    windowTop.style.cssText = `
-        position: absolute;
-        width: ${config.defaultWidth}px;
-        height: 28px;
-        background-image: linear-gradient(rgba(255, 255, 255, 0.5),rgba(110, 110, 110, 0.5),rgba(110, 110, 110, 0.5));
-        backdrop-filter: blur(7px) saturate(200%) brightness(0.7);
-        -webkit-backdrop-filter: blur(5.4px);
-        cursor: default;
-        user-select: none;
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        border-bottom-color: rgba(17, 17, 17, 0.38);
-        box-shadow: 0px 0px 11px 0px rgba(0,0,0,0.5);
-        box-shadow: inset 0px 0px 11px 0px rgba(0,0,0,0.5);
-    `;
-    //window base
+    windowTop.className = 'window-top';
+    windowTop.style.width = `${config.defaultWidth}px`;
+
     const windowBase = document.createElement('div');
     windowBase.id = `${windowType}WindowBase`;
-    windowBase.style.cssText = `
-        position: absolute;
-        width: ${config.defaultWidth}px;
-        height: ${config.defaultHeight}px;
-        radius: 8px;
-        background-color: transparent;
-        user-select: none;
-        transform: translate(0px, 30px); 
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        border-top-width: 0px;
-        border-bottom-left-radius: 8px;
-        border-bottom-right-radius: 8px;
-        box-shadow: 0px 0px 11px 0px rgba(0,0,0,0.5);
-    `;
+    windowBase.className = 'window-base';
+    windowBase.style.width = `${config.defaultWidth}px`;
+    windowBase.style.height = `${config.defaultHeight}px`;
+
     //window content
     const iframe = document.createElement('iframe');
     iframe.src = config.content;
@@ -258,7 +182,7 @@ function createWindow(windowType, config) {
     minimizeButton.addEventListener('click', minimizeWindow);
 
     function setDivPosition(xPos, yPos) {
-        const yOff = parseInt(windowTop.style.height) + parseInt(windowTop.style.borderTopWidth) + parseInt(windowBase.style.borderBottomWidth);
+        const yOff = 30;
         windowTop.style.transform = `translate(${xPos}px, ${yPos}px)`;
         windowBase.style.transform = `translate(${xPos}px, ${yPos + yOff}px)`;
     }
