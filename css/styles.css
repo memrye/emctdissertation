@@ -136,19 +136,34 @@
 }
 
 .start-menu-button::after {
-    background: linear-gradient(rgba(255, 255, 255, 0.3) 0%,transparent 90%);
+    background: linear-gradient(rgba(255, 255, 255, 0.4) 0%,transparent 90%);
     content: '';
     position: absolute;
     height: 60%;
     width: 75%;
     left: 12.5%;
-    top: 10%;
+    top: 5%;
     border-radius: 50%;
     z-index: 30;
 }
 
 .start-menu-button:hover {
     filter: brightness(1.2);
+}
+
+.start-menu-username {
+    position: absolute;
+    top: 10%;
+    left: 40%;
+    width: 20%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+    color: white;
+    text-shadow:0 0 5px rgba(0, 0, 0, 0.5);
+    user-select: none;
 }
 
 .start-menu-content {
@@ -168,7 +183,7 @@
     position: absolute;
     top: 19%;
     left: 63%;
-    height: 75%;
+    height: 79%;
     width: 31%;
     background: transparent;
     margin: 0 3%;
@@ -195,6 +210,33 @@
 
 .start-menu-sidebar-button:active {
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+}
+
+.start-menu-sidebar-logout {
+    color: white;
+    text-shadow:0 0 5px rgba(0, 0, 0, 0.5);
+    background: transparent;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 30px;
+    width: 80%;
+    margin: 2% 10%;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset -0.5px -0.5px 1px rgba(0, 0, 0, 0.1);
+    transition: all 0.1s ease;
+}
+
+.start-menu-sidebar-logout:hover {
+    background-color: rgba(255, 0, 0, 0.5);
+    box-shadow: inset 0 0.4px 3px rgba(0, 0, 0, 0.1);
+    text-shadow:0 0 5px rgba(255,255,255,0.9);
+}
+
+.start-menu-sidebar-logout:active {
+    background: rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 0.4px 1px rgba(0, 0, 0, 0.3);
 }
 
 /* window styles */
@@ -289,4 +331,413 @@
     height: 15px;
     cursor: nw-resize;
     background: transparent;
+}
+
+/* background content */
+
+.swish {
+    height: 250vh;
+    width: 50vw;
+    background-color: transparent;
+    border-left: 2px solid rgba(179, 179, 179, 0.5);
+    position: absolute;
+    border-radius: 50%;
+    display: inline-block;
+    transform-origin: center;
+    box-shadow: inset 0px 0px 7px 0px rgba(255, 255, 255, 0.3);
+    clip-path: ellipse(25% 50% at left center);
+}
+
+#swish {
+    top: -22vh;
+    right: 10vw;
+    transform: rotate(70deg);
+}
+
+#swish2 {
+    top: -22vh;
+    right: 10vw;
+    transform: rotate(68deg);
+}
+
+#swish3 {
+    top: -22vh;
+    right: 10vw;
+    transform: rotate(71deg);
+}
+
+/* login content */
+
+.login-container {
+    position: flex;
+    width: 300px;
+    padding: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background: linear-gradient(rgba(230, 223, 255, 0.21),transparent,transparent,transparent);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(5.4px);
+    border-radius: 10px;
+    outline: 1px solid rgba(255, 255, 255, 0.21);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    z-index: 1000;
+    flex-direction: column;
+}
+
+
+.login-container p {
+    text-align: left;
+    left: 6%;
+    position: relative;
+    font-size: 14px;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+    margin-top: 0px;
+    margin-bottom: 2px;
+    text-shadow:0 0 5px rgba(255,255,255,0.5);
+    user-select: none
+}
+
+.login-container input {
+    width: 85%;
+    padding: 7px;
+    margin-bottom: 3%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.05);
+    color: rgb(255, 255, 255);
+    box-shadow: inset 0 0.4px 1px rgba(0, 0, 0, 0.3);
+    text-shadow:0 0 5px rgba(255,255,255,0.5);
+}
+
+.login-container button {
+    width: 90%;
+    padding: 7px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    background: rgba(0, 0, 0, 0.05);
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: inset 0 0.4px 1px rgba(0, 0, 0, 0.3);
+    text-shadow:0 0 5px rgba(255,255,255,0.3);
+}
+
+.login-container button:hover {
+    box-shadow: inset 0 0.4px 3px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.1);
+    text-shadow:0 0 5px rgba(255,255,255,0.9);
+}
+
+.login-container button:active {
+    box-shadow: inset 0 0.4px 0.5px rgba(0, 0, 0, 0);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.avatar-container {
+    margin: 0 5%;
+    right: 20px;
+    width: 83%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0.4px 1px rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.05);
+    height: auto;
+    border-radius: 10px;
+    overflow: auto;
+    white-space: nowrap;
+    padding:10px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+    user-select: none;
+    scroll-behavior: smooth;
+}
+
+.profile-image {
+    display: inline-block;
+    height: 60px;
+    width: 60px;
+    margin-right: 10px;
+    border-radius: 50% / 10%;
+    background: linear-gradient(rgba(230, 223, 255, 0.21), transparent);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(5.4px);
+    outline: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.profile-imagecontainer{
+    height: 60px;
+    width: 60px;
+    border-radius: 50% / 10%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    outline: 2px solid rgba(255, 255, 255, 0.18);
+    outline-offset: -1px;
+    cursor: pointer;
+    transform: scale(0.8);
+    
+}
+
+.profile-image:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);;
+}
+
+.profile-image.selected {
+    transform: scale(1.1);
+    background: linear-gradient(rgba(255, 255, 255, 0.45), rgba(246, 244, 255, 0.2));
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+.h2 {
+    position: flex;
+    text-align: left;
+    font-size: 50px;
+    top: -1%;
+    position: relative;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+    margin-bottom: 6px;
+    margin-top: 0px;
+    text-shadow:0 0 5px rgba(255,255,255,0.5);
+    user-select: none
+}
+
+#background-settings-container{
+    width: 85%;
+    margin: 3% 5%;
+    height: auto;
+}
+
+#backgroundcolorslider{
+    appearance: none;
+    width: 100%;
+    height: 10px;
+    margin: 0px;
+}
+
+#backgroundcolorslider::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    background: #ffffff;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 0px;
+    outline: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 0 5px rgba(255,255,255,0.5);
+  }
+
+/* chatroom */
+
+#chat {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: safe flex-end;
+    overflow-y: auto;
+    background: transparent;
+    backdrop-filter: blur(4px) brightness(120%);
+    filter:drop-shadow(0 0 4px rgba(0,0,0,0.3));
+    color: white;
+    width: 72%;
+    height: 78%;
+    right: 5%;
+    bottom: 10%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 0px;
+    border-right: 0px;
+    overflow-y: scroll;
+    padding: 10px;
+}
+
+#chat::before{
+    content: 'Chat';
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+    font-style: oblique;
+    font-weight: bolder;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.2);
+    font-size: 480%;
+    background: transparent;
+    position: absolute;
+    height: 60%;
+    width: 100%;
+    left: -10%;
+    top: -10%;
+    z-index: 30;
+    filter: blur(4px);
+}
+
+#message-form {
+    position: fixed;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.5));
+    display: block;
+    bottom: 0%;
+    left: 0;
+    height: 15%;
+    width: 100%
+}
+#message-input {
+    position: fixed;
+    text-align: start;
+    text-wrap: wrap;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    box-shadow: inset 0px 0px 7px 0px rgba(0,0,0,0.3);
+    margin: 2%;
+    width: 60%;
+    height: 30px;
+    bottom: 0%;
+    left: 0;
+}
+#message-form button {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+    font-weight: 600;
+    text-shadow:0 0 5px rgba(0, 0, 0, 0.5);
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 2%;
+    width: 26%;
+    height: 53px;
+    border: 0px;
+    padding: 10px;
+    border-radius: 20px;
+    background: radial-gradient(circle at 50% 70%, rgb(163, 236, 134) 0%, rgb(93, 189, 55) 60%);
+    box-shadow: inset 0px 0px 7px 0px rgba(0,0,0,0.3);
+    font-size: large;
+}
+
+#message-form button::after {
+    background: linear-gradient(rgba(255, 255, 255, 0.3) 0%,transparent 90%);
+    content: '';
+    position: absolute;
+    height: 60%;
+    width: 75%;
+    left: 12.5%;
+    top: 10%;
+    border-radius: 20px;
+    z-index: 30;
+}
+
+#message-form button:active {
+    filter: brightness(80%);
+}
+.message {
+    position: sticky;
+    padding: 10px;
+    border-radius: 20px;
+    max-width: 70%;
+    box-shadow: inset 0 0px 6px rgba(0, 0, 0, 0.6);
+    margin-bottom: 10px;
+    color: black;
+    z-index: 1;
+    text-shadow:0 0 5px rgba(255, 255, 255, 0.5);
+    font-weight: 500;
+    filter: drop-shadow(0 0px 6px rgba(0, 0, 0, 0.3));
+    opacity: 90%;
+}
+
+.message::before{
+    display: flex;
+    position: absolute;
+    background: linear-gradient(rgba(255, 255, 255, 0.3) 0%,transparent 90%);
+    content: '';
+    height: 20px;
+    width: 80%;
+    top: 10%;
+    left: 10%;
+    border-radius: 30px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+
+.message.user-message {
+    align-self: flex-end;
+    background: radial-gradient(circle at 50% 70%, rgb(172, 172, 172) 0%, rgb(131, 131, 131) 60%);
+}
+
+.message.other-message {
+    align-self: flex-start;
+    background: radial-gradient(circle at 50% 70%, rgb(163, 236, 134) 0%, rgb(93, 189, 55) 60%);
+}
+
+#profile {
+    position: fixed;
+    top: 5%;
+    left: 5%;
+    width: 150px;
+    height: 150px;
+    background: repeating-radial-gradient(circle, rgb(165, 165, 165) 0%,rgb(212, 212, 212) 5%, rgb(165, 165, 165) 10% );
+    box-shadow: inset 20px 50px 20px rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    color: white;
+    text-align: center;
+    text-indent: .1em;
+    z-index: 1000;
+}
+
+#profile-imagecontainer {
+    position: relative;
+    left: 7.5%;
+    top: 7.5%;
+    width: 85%;
+    height: 85%;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+    filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.3));
+}
+
+#profile-imagecontainer::after {
+    background: linear-gradient(rgba(255, 255, 255, 0.4) 0%,transparent 90%);
+    content: '';
+    position: absolute;
+    height: 60%;
+    width: 75%;
+    left: 12.5%;
+    top: 5%;
+    border-radius: 50%;
+    z-index: 30;
+}
+
+#profile-username {
+    content: 'test';
+    position: absolute;
+    top: 90%;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: black;
+    text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    padding: 5px;
+    user-select: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+#profile-splash {
+    position: fixed;
+    top: -25%;
+    left: -60%;
+    width: 200%;
+    height: 100%;
+    background: url('/images/circles.svg');
+    background-size: 200%;
+    background-position: 20% 0%;
+    transform: rotate(90deg);
+    filter: blur(2px);
+    opacity: 0.2;
+    pointer-events: none
 }

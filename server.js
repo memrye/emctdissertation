@@ -18,6 +18,15 @@ const openai = new OpenAI({
     baseURL: "https://api.groq.com/openai/v1"
 });
 
+function requireLogin(req, res, next) {
+    const userData = req.cookies.userData;
+    if (!userData) {
+        res.redirect('/login');
+    } else {
+        next();
+    }
+}
+
 app.use(express.static(path.join(__dirname)));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -78,7 +87,7 @@ io.on('connection', (socket) => {
 
 
 
-app.get('/', (req, res) => {
+app.get('/', requireLogin, (req, res) => {
     res.render('index');
 });
 
@@ -94,6 +103,7 @@ app.post('/login', (req, res) => {
     const userData = {
         username: req.body.username,
         avatar: req.body.selectedAvatar,
+        color: req.body.backgroundcolorslider,
     };
 
     res.cookie('userData', JSON.stringify(userData), { maxAge: 900000, httpOnly: false });

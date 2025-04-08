@@ -6,14 +6,14 @@
 
 [X] use groq ai interface instead of chatgpt
 
-[] add sign-in / out function
-- [] add start icon
-- [] parse username/pfp to main and show in start menu 
+[X] add sign-in / out function
+- [X] add start icon
+- [X] parse username/pfp to main and show in start menu 
 
 [X] fix z index so focused window always has higher z index
 
 [X] add current time to taskbar
 
-[] fix/redesign chatroom
+[X] fix/redesign chatroom
 
-[] refactor to allow user to change colour and add option to login bar
+[X] refactor to allow user to change colour and add option to login bar

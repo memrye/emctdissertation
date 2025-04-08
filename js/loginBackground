@@ -22,17 +22,17 @@ let seed_i = 0;
                 translateY(${Math.cos(-seed) * -10}px)
             `;
 
-            swish.style.borderLeft = `2px solid rgba(104, 137, 199, ${Math.sin(seed + 10)*0.5})`;
-            swish2.style.borderLeft = `2px solid rgba(104, 137, 199, ${seed*0.5})`;
-            swish3.style.borderLeft = `2px solid rgba(104, 137, 199, ${seed*0.5})`;
+            swish.style.borderLeft = `2px solid rgba(199, 199, 199, ${Math.sin(seed + 10)*0.5})`;
+            swish2.style.borderLeft = `2px solid rgba(199, 199, 199, ${seed*0.5})`;
+            swish3.style.borderLeft = `2px solid rgba(199, 199, 199, ${seed*0.5})`;
 
             swish.style.boxShadow = `inset 0px 0px 7px 0px rgba(255, 255, 255, ${Math.abs(Math.sin((seed/2)+2)*0.3)})`;
             swish2.style.boxShadow = `inset 0px 0px 7px 0px rgba(255, 255, 255, ${Math.abs(Math.sin(seed/3)*0.3)})`;
             swish3.style.boxShadow = `inset 0px 0px 7px 0px rgba(255, 255, 255, ${Math.abs(Math.sin((seed/3)+5)*0.3)})`;
             
             swish.style.filter = `drop-shadow(${seed * 2}rem ${seed * 5}rem ${seed*0.03}rem rgba(255, 255, 255, ${Math.sin(seed + 4)}))`;
-            swish2.style.filter = `drop-shadow(${seed * -3}rem ${seed*1.5}rem 0.01rem rgba(104, 137, 199, ${Math.sin(seed)}))`;
-            swish3.style.filter = `drop-shadow(${seed * -3}rem ${seed*1.5}rem 0.01rem rgba(104, 137, 199, ${Math.sin(seed)}))`;
+            swish2.style.filter = `drop-shadow(${seed * -3}rem ${seed*1.5}rem 0.01rem rgba(199, 199, 199, ${Math.sin(seed)}))`;
+            swish3.style.filter = `drop-shadow(${seed * -3}rem ${seed*1.5}rem 0.01rem rgba(199, 199, 199, ${Math.sin(seed)}))`;
             
             requestAnimationFrame(animate);
         }

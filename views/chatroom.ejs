@@ -1,118 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="/css/styles.css">
     <title>chatchat</title>
     <style>
     body {
-        font-family: monospace, sans-serif;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
         margin: 0;
         padding: 0;
-        display: flex;
+        display: block;
         flex-direction: column;
         height: 100vh;
-        background: rgb(255,255,255);
+        background: repeating-linear-gradient(80deg, rgb(121, 121, 121) 0%, rgb(77, 77, 77) 10%, rgb(102, 102, 102) 30%, rgb(121, 121, 121) 60%);
+        overflow: clip;
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
     }
-    #chat {
-        flex: 1;
-        padding: 10px;
-        display: flex;
-        flex-direction: column;
-        justify-content: safe flex-end;
-        overflow-y: auto;
-        border-bottom: 1px solid #ccc;
-        background-color: rgba(50,50,50,0.2);
-        color: white;
-    }
-    #message-form {
-        display: flex;
-        padding: 10px;
-    }
-    #message-input {
-        font-family: monospace, sans-serif;
-        flex: 1;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 50px;
-        box-shadow: inset 0px 0px 7px 0px rgba(0,0,0,0.3);
-    }
-    #message-form button {
-        font-family: monospace, sans-serif;
-        padding: 10px 20px;
-        margin-left: 10px;
-        background-image: linear-gradient(rgb(230, 223, 255),rgb(115, 127, 197),rgb(96, 92, 158));
-        color: rgb(255, 255, 255);
-        text-shadow: 1px 1px 4px rgba(0, 0, 0, 1);
-        border: 4px rgb(175, 197, 115);
-        border-radius: 50px;
-        cursor: pointer;
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
-        transition: all 0.1s ease-in-out;
-    }
-    #message-form button:active {
-        background-image: linear-gradient(to bottom right, rgb(96, 92, 158),rgb(115, 127, 197));
-    }
-    .message {
-        padding : 15px;
-        border-radius: 20px;
-        max-width: 70%;
-        display: flex;
-        flex-direction: column;
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
-        margin-bottom: 10px;
-    }
-    .message.user-message {
-        align-self: flex-end;
-        background-image: linear-gradient(rgb(223, 223, 223),rgb(141, 141, 141),rgb(113, 113, 113));
-    }
-
-    .message.other-message {
-        align-self: flex-start;
-        background-image: linear-gradient(rgb(230, 223, 255),rgb(115, 127, 197),rgb(96, 92, 158));
-    }
-
-    .message .user {
-        font-weight: bold;
-        color: white;
-    }
-    #profile {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        width: 130px;
-        height: 130px;
-        background: linear-gradient(rgba(230, 223, 255, 0.21),rgba(115, 127, 197, 0.21),rgba(96, 92, 158, 0.21));;
-        box-shadow: inset 0 4px 30px rgba(0, 0, 0, 0.1);
-        backdrop-filter: blur(7px) saturate(200%) brightness(0.7);
-        -webkit-backdrop-filter: blur(5.4px);
-        border-radius: 10% / 50%;
-        color: white;
-        text-align: center;
-        text-indent: .1em;
-        z-index: 1000;
-    }
-    .plants{
-        position: flex;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: url('/images/plants.svg');
-        background-size: cover;
-        filter:saturate(160%) hue-rotate(120deg);
-        translate: scale(0.2);
-        opacity: 1;
-        z-index: -1;
-    }
+    
     </style>
 </head>
 <body>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/chatroom.js"></script>
-    <div class="plants"></div>
+    <div id="profile">
+        <div id="profile-splash"></div>
+        <div id="profile-imagecontainer"></div>
+        <div id="profile-username"></div>
+    </div>
     <div id="chat"></div>
     <form id="message-form">
-        <input type="text" id="message-input" autocomplete="off" placeholder="chat away..." />
-        <button type="submit">send</button>
+        <input type="textarea" id="message-input" autocomplete="off" placeholder="chat away..." />
+        <button type="submit">Send</button>
     </form>
 </body>
 </html>

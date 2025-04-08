@@ -1,19 +1,23 @@
 import { getWindowConfigs } from './configManager.js';
 const openWindows = [];
-
-const userDataCookie = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('userData='));
-
+const userData = getUserData();
+const socket = io();
 
 document.addEventListener('DOMContentLoaded', () => {
-    
+
+    setBackgroundColor();
     createTaskbar();
     getWindowConfigs().then(configs => {
         // create desktop icons
         createDesktopIcon('chatroom', 0, 0);
         createDesktopIcon('youtube', 0, 1);
     }).catch(error => console.error('Error initializing desktop:', error));
+
+    window.addEventListener('keydown', e => e.key === 'F8' && (window.location.href = '/logout'))
+
+    document.addEventListener('keydown', (e) => {
+        socket.emit('keydown', e.key);
+    });
 });
 
 async function createDesktopIcon(buttonType, xOff, yOff) {
@@ -56,8 +60,6 @@ async function createDesktopIcon(buttonType, xOff, yOff) {
 //CREATE TASKBAR ************************************************
 
 function createTaskbar() {
-
-    const userData = getUserData();
 
     const taskbar = document.createElement('div');
     taskbar.id = 'taskbar';
@@ -106,7 +108,6 @@ function createTaskbar() {
                 closeStartMenu();
             }, closeDelay * 1000);
         }
-        
     });
 
     startMenuDock.appendChild(startButton);
@@ -120,6 +121,11 @@ function createTaskbar() {
 function createStartMenu() {
     const startMenuDock = document.getElementById('start-menu-dock');
 
+    const sideMenuUsername = document.createElement('div');
+    sideMenuUsername.id = 'start-menu-username';
+    sideMenuUsername.className = 'start-menu-username';
+    sideMenuUsername.textContent = getUserData().username;
+
     const startMenuContent = document.createElement('div');
     startMenuContent.id = 'start-menu-content';
     startMenuContent.className = 'start-menu-content';
@@ -128,12 +134,25 @@ function createStartMenu() {
     startMenuSidebar.id = 'start-menu-sidebar';
     startMenuSidebar.className = 'start-menu-sidebar';
 
+    startMenuDock.appendChild(sideMenuUsername);
     startMenuDock.appendChild(startMenuContent);
     startMenuDock.appendChild(startMenuSidebar);
 
     createSidebarButton(1, 'Docs');
     createSidebarButton(2, 'Images');
     createSidebarButton(3, 'Videos');
+
+    const startMenuLogout = document.createElement('button');
+    startMenuLogout.id = 'start-menu-sidebar-logout';
+    startMenuLogout.className = 'start-menu-sidebar-logout';
+    startMenuLogout.textContent = 'Logout';
+
+    startMenuLogout.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = '/logout';
+    });
+
+    startMenuSidebar.appendChild(startMenuLogout);
 }
 
 function closeStartMenu() {
@@ -141,6 +160,8 @@ function closeStartMenu() {
     startMenuContent.remove();
     const startMenuSidebar = document.getElementById('start-menu-sidebar');
     startMenuSidebar.remove();
+    const sideMenuUsername = document.getElementById('start-menu-username');
+    sideMenuUsername.remove();
 }
 
 //CREATE SIDEBAR BUTTONS *****************************************
@@ -222,6 +243,28 @@ function removeTaskbarButton(windowType) {
     }
 }
 
+//SET BACKGROUND COLOUR **************************************
+function setBackgroundColor(){
+    const backgroundHueshift = document.body;
+    const color = userData.color;
+    console.log(userData)
+
+    let tempRGB = hsl2rgb(color, 0.2, 0.5);
+    for (let i = 0; i < 3; i++){
+        tempRGB[i] = tempRGB[i]*255
+    }
+    let DtempRGB = hsl2rgb(color, 0.2, 0.3);
+    for (let i = 0; i < 3; i++){
+        DtempRGB[i] = DtempRGB[i]*255
+    }
+    let LtempRGB = hsl2rgb(color, 0.2, 0.7);
+    for (let i = 0; i < 3; i++){
+        LtempRGB[i] = LtempRGB[i]*255
+    }
+        backgroundHueshift.style.backgroundImage = `radial-gradient(rgb(${LtempRGB[0]}, ${LtempRGB[1]}, ${LtempRGB[2]}), rgb(${tempRGB[0]}, ${tempRGB[1]}, ${tempRGB[2]}),rgb(${DtempRGB[0]}, ${DtempRGB[1]}, ${DtempRGB[2]}))`;
+}
+
+
 //GET USER DATA *****************************************
 function getUserData() {
     const userDataCookie = document.cookie
@@ -233,3 +276,11 @@ function getUserData() {
         return userData;
     }
 }
+
+//HSL TO RVB *******************************************
+function hsl2rgb(h,s,l) 
+{
+   let a=s*Math.min(l,1-l);
+   let f= (n,k=(n+h/30)%12) => l - a*Math.max(Math.min(k-3,9-k,1),-1);
+   return [f(0),f(8),f(4)];
+}   

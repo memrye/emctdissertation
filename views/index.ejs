@@ -17,46 +17,19 @@
             background-repeat: no-repeat;
             background-size: cover;
             background-attachment: fixed;
-        }
-        .swish {
-            height: 250vh;
-            width: 40vw;
-            background-color: transparent;
-            border-left: 2px solid rgba(104, 137, 199, 0.5);
-            position: absolute;
-            border-radius: 50%;
-            display: inline-block;
-            transform-origin: center;
-            box-shadow: inset 0px 0px 7px 0px rgba(255, 255, 255, 0.3);
-            filter: drop-shadow(1rem 4rem 0.01rem rgba(255, 255, 255, 1));
-            clip-path: ellipse(25% 50% at left center);
+            
         }
 
-        #swish {
-            top: -30vh;
-            right: 20vw;
-            transform: rotate(70deg);
-        }
-
-        #swish2 {
-            top: -30vh;
-            right: 19vw;
-            transform: rotate(68deg);
-        }
-
-        #swish3 {
-            top: -30vh;
-            right: 19vw;
-            transform: rotate(71deg);
-        }
     </style>
 </head>
 <body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module" src="/js/desktop.js"></script>
+    <script type="module" src="/js/window.js"></script>
     <span class="swish" id="swish"></span>
     <span class="swish" id="swish2"></span>
     <span class="swish" id="swish3"></span>
     <script src="/js/loginBackground"></script>
-    <script type="module" src="/js/window.js"></script>
-    <script type="module" src="/js/desktop.js"></script>
+    
 </body>
 </html>

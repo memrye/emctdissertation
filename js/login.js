@@ -52,4 +52,32 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (e) => {
         socket.emit('keydown', e.key);
     });
+
+    const colorSlider = document.getElementById('backgroundcolorslider');
+    const backgroundHueshift = document.body
+
+    colorSlider.addEventListener('mousemove', (e) => {
+        let tempRGB = hsl2rgb(colorSlider.value, 0.2, 0.5);
+        for (let i = 0; i < 3; i++){
+            tempRGB[i] = tempRGB[i]*255
+        }
+        let DtempRGB = hsl2rgb(colorSlider.value, 0.2, 0.3);
+        for (let i = 0; i < 3; i++){
+            DtempRGB[i] = DtempRGB[i]*255
+        }
+        let LtempRGB = hsl2rgb(colorSlider.value, 0.2, 0.7);
+        for (let i = 0; i < 3; i++){
+            LtempRGB[i] = LtempRGB[i]*255
+        }
+        backgroundHueshift.style.backgroundImage = `radial-gradient(rgb(${LtempRGB[0]}, ${LtempRGB[1]}, ${LtempRGB[2]}), rgb(${tempRGB[0]}, ${tempRGB[1]}, ${tempRGB[2]}),rgb(${DtempRGB[0]}, ${DtempRGB[1]}, ${DtempRGB[2]}))`;
+        console.log(colorSlider.value)
+    })
+
 });
+
+function hsl2rgb(h,s,l) 
+{
+   let a=s*Math.min(l,1-l);
+   let f= (n,k=(n+h/30)%12) => l - a*Math.max(Math.min(k-3,9-k,1),-1);
+   return [f(0),f(8),f(4)];
+}   
