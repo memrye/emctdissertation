@@ -6,7 +6,7 @@ const http = require('http');
 const fs = require('fs').promises;
 const { Server } = require('socket.io');
 const cookieParser = require('cookie-parser');
-//const maxAPI = require("max-api");
+const maxAPI = require("max-api");
 
 const app = express();
 const server = http.createServer(app);
@@ -33,6 +33,7 @@ app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 
 const { chatUsers } = require('./config/chatUsers');
+const { futimesSync } = require('fs');
 
 //get chat response from llama through groq api
 async function getResponse(userMessage, userPrompt) {
@@ -75,8 +76,30 @@ io.on('connection', (socket) => {
         }, String(response).length * 50);
     });
 
+    //send RMS to mediaplayer
+    maxAPI.addHandler("rms", (values) => {
+        io.emit('rms', values.split(' '));
+    });
+
+    // handle interactions
     socket.on('keydown', (key) => {
         outletToMax(`key "${key}"`);
+    });
+
+    socket.on('windowstate', (state) => {
+        outletToMax(`windowstate "${state}"`);
+    });
+
+    socket.on('loggedin', (state) => {
+        outletToMax(`loggedin "${state}"`);
+    });
+
+    socket.on('mouseover', (element) => {
+        outletToMax(`mouseover "${element}"`);
+    });
+
+    socket.on('backgroundChanged', (value) => {
+        outletToMax(`backgroundChanged "${value}"`);
     });
 
     // Handle disconnects
@@ -93,6 +116,10 @@ app.get('/', requireLogin, (req, res) => {
 
 app.get('/chatroom', (req, res) => {
     res.render('chatroom');
+});
+
+app.get('/mediaplayer', (req, res) => {
+    res.render('mediaplayer');
 });
 
 app.get('/login', (req, res) => {

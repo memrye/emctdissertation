@@ -12,5 +12,12 @@
         "content": "https://www.youtube.com/embed/zm0PguJ4sDg",
         "defaultWidth": 800,
         "defaultHeight": 450
+    },
+    "mediaplayer": {
+        "title": "mediaplayer",
+        "icon": "./images/youtube.png",
+        "content": "http://localhost:8000/mediaplayer",
+        "defaultWidth": 800,
+        "defaultHeight": 450
     }
 }

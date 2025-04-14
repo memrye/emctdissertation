@@ -7,6 +7,9 @@ document.addEventListener('createNewWindow_chatroom', () => {
 document.addEventListener('createNewWindow_youtube', () => {
     createWindow('youtube', configs.youtube); 
 });
+document.addEventListener('createNewWindow_mediaplayer', () => {
+    createWindow('mediaplayer', configs.mediaplayer); 
+});
 
 window.zCounter = 1; 
 

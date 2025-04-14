@@ -5,19 +5,24 @@ const socket = io();
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    
     setBackgroundColor();
     createTaskbar();
     getWindowConfigs().then(configs => {
         // create desktop icons
         createDesktopIcon('chatroom', 0, 0);
         createDesktopIcon('youtube', 0, 1);
+        createDesktopIcon('mediaplayer', 0, 2);
     }).catch(error => console.error('Error initializing desktop:', error));
+
+    socket.emit('windowstate', 'desktop');
 
     window.addEventListener('keydown', e => e.key === 'F8' && (window.location.href = '/logout'))
 
     document.addEventListener('keydown', (e) => {
         socket.emit('keydown', e.key);
     });
+
 });
 
 async function createDesktopIcon(buttonType, xOff, yOff) {

@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 profileImage.appendChild(imageContainer);
                 avatarContainer.appendChild(profileImage);
 
-                // Add click handler
                 profileImage.addEventListener('click', () => {
                     document.querySelectorAll('.profile-image').forEach(a => 
                         a.classList.remove('selected')
@@ -26,6 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     profileImage.classList.add('selected');
                     document.getElementById('selectedAvatar').value = avatar;
                 });
+
+                profileImage.addEventListener('mouseenter', () => {
+                    socket.emit('mouseover', 'loginProfileImage')
+                })
+
             });
         } catch (error) {
             console.error('Error loading avatars:', error);
@@ -70,8 +74,15 @@ document.addEventListener('DOMContentLoaded', () => {
             LtempRGB[i] = LtempRGB[i]*255
         }
         backgroundHueshift.style.backgroundImage = `radial-gradient(rgb(${LtempRGB[0]}, ${LtempRGB[1]}, ${LtempRGB[2]}), rgb(${tempRGB[0]}, ${tempRGB[1]}, ${tempRGB[2]}),rgb(${DtempRGB[0]}, ${DtempRGB[1]}, ${DtempRGB[2]}))`;
-        console.log(colorSlider.value)
+
+        socket.emit('backgroundChanged', `${colorSlider.value}`)
     })
+
+    const loginButton = document.getElementById('loginButton')
+    loginButton.addEventListener('mousedown', (e) => {
+        socket.emit('loggedin', 'true')
+    })
+    socket.emit('windowstate', 'login');
 
 });
 

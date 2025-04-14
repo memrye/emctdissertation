@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageForm = document.getElementById('message-form');
     const messageInput = document.getElementById('message-input');
 
-    // create profile element
+    // get profile element
     const profile = document.getElementById('profile');
     const profileImageContainer = document.getElementById('profile-imagecontainer')
     const usernameDisplay = document.getElementById('profile-username');
@@ -21,6 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
         messageElement.innerHTML = `${data.message}`;
         chat.appendChild(messageElement);
         chat.scrollTop = chat.scrollHeight;
+    });
+
+    document.addEventListener('keydown', (e) => {
+        socket.emit('keydown', e.key);
     });
 
     messageForm.addEventListener('submit', (e) => {
