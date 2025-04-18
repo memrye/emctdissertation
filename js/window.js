@@ -47,21 +47,13 @@ function createWindow(windowType, config) {
         border: none;
         background-color: transparent;
         border-bottom-left-radius: 8px;
-        border-bottom-right-radius: 8px;
+        border-bottom-right-radius: 16px;
     `;
     iframe.allowTransparency = "true";
+
     //resize handle
     const resizeHandle = document.createElement('div');
-    resizeHandle.style.cssText = `
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        width: 15px;
-        height: 15px;
-        cursor: nw-resize;
-        background: transparent;
-    `;
-    
+    resizeHandle.className = 'resize-handle'
 
     windowTop.appendChild(minimizeButton);
     windowTop.appendChild(closeButton);
@@ -157,6 +149,7 @@ function createWindow(windowType, config) {
     function drag(e) {
         if (isDragging) {
             e.preventDefault();
+            rafId = requestAnimationFrame(updatePosition);
         }
     }
 

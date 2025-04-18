@@ -182,6 +182,10 @@ function createSidebarButton(id, text) {
 
     });
 
+    sidebarButton.addEventListener('mouseenter', () => {
+        socket.emit('mouseover', 'startMenuSidebar')
+    })
+
     sidebar.appendChild(sidebarButton);
 }
 

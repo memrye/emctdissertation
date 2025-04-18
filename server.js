@@ -102,6 +102,14 @@ io.on('connection', (socket) => {
         outletToMax(`backgroundChanged "${value}"`);
     });
 
+    socket.on('isPlaying', (value) => {
+        outletToMax(`isPlaying "${value}"`);
+    });
+
+    socket.on('seekbar', (value) => {
+        outletToMax(`seekbar "${value}"`);
+    });
+
     // Handle disconnects
     socket.on('disconnect', () => {
 

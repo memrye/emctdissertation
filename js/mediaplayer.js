@@ -1,22 +1,45 @@
 document.addEventListener('DOMContentLoaded', () => {
     const socket = io();
-    const spectrumContainer = document.getElementById('spectrum-container')
-    const interpolationSpeed = 0.05; 
+    const canvas = document.getElementById('spectrum-canvas');
+    const seekbar = document.getElementById('seekbar-slider')
+    const ctx = canvas.getContext('2d');
+    const playPauseButton = document.getElementById('play-pause-button');
+    let isPlaying = false;
+    const interpolationSpeed = 0.08;
 
-    const bands = Array(16).fill().map(() => ({
-        current: 0,
-        target: 0,
-        element: document.createElement('div')
-    }));
+    playPauseButton.addEventListener('click', () => {
+        isPlaying = !isPlaying;
+        
+        playPauseButton.innerHTML = isPlaying ? 
+            `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-pause-fill" viewBox="0 0 16 16">
+                <path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5m5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5"/>
+            </svg>` :
+            `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
+                <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+            </svg>`;
 
-    bands.forEach((band) => {
-        band.element.className = 'spectrum-band';
-        spectrumContainer.appendChild(band.element);
+        requestAnimationFrame(updateSeekbar);
+        socket.emit('isPlaying', isPlaying);
     });
+
+    function resizeCanvas() {
+        canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+        canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    }
+    
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+
+    const bands = Array(8).fill().map(() => ({
+        current: 0,
+        target: 0
+    }));
 
     socket.on('rms', (values) => {
         bands.forEach((band, i) => {
-            band.target = ((values[i]+1)*2)/200;
+            band.target = ((values[i]+1)*2)/350;
         });
     });
 
@@ -24,22 +47,48 @@ document.addEventListener('DOMContentLoaded', () => {
         return start * (1 - t) + end * t;
     }
 
-    function updateSpectrum() {
+    function drawSpectrum() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const barWidth = canvas.width / 13;
+        const gap = (canvas.width / 12) / 2;
+        const startX = gap;
+
         bands.forEach((band, i) => {
             band.current = lerp(band.current, band.target, interpolationSpeed);
-            band.element.style.height = `${band.current}px`;
-            band.element.style.width = `5%`;
+            
+            const x = startX + (barWidth + gap) * i;
+            const height = band.current;
+            const y = canvas.height - height;
+            
+            ctx.beginPath();
+            ctx.rect(x, y, barWidth, height, 5);
+            ctx.fillStyle = 'rgba(220, 220, 220, 0.8)';
+            ctx.fill();
         });
 
-        // let scale1 = bands[1].current / 100;
-        // let scale2 = 1-(bands[3].current / 100);
-        // noise(3,0.3,3).thresh(scale2,0.03).diff(o3,0.3).out(o1)
-        // gradient(5).mask(o1).invert(1).out(o0)
-        requestAnimationFrame(updateSpectrum);
+        requestAnimationFrame(drawSpectrum);
     }
 
-    // render(o0)
-    requestAnimationFrame(updateSpectrum);
+    function updateSeekbar() {
+        if (!isPlaying){
+            return;
+        }
+        let value = seekbar.value;
+        if (value < 512) {
+            value++;
+        } else {
+            value = 0;
+        }
+        seekbar.value = value;
+        socket.emit('seekbar', value);
+        window.setTimeout(() => {
+            requestAnimationFrame(updateSeekbar);
+        }, 100);
 
+    }
 
+    socket.emit('isPlaying', isPlaying);
+    requestAnimationFrame(updateSeekbar);
+    requestAnimationFrame(drawSpectrum);
 });

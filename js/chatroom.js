@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chat = document.getElementById('chat');
     const messageForm = document.getElementById('message-form');
     const messageInput = document.getElementById('message-input');
+    const userData = getUserData();
 
     // get profile element
     const profile = document.getElementById('profile');
@@ -37,3 +38,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
+
+//GET USER DATA *****************************************
+function getUserData() {
+    const userDataCookie = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('userData='));
+    
+    if (userDataCookie) {
+        const userData = JSON.parse(decodeURIComponent(userDataCookie.split('=')[1]));
+        return userData;
+    }
+}

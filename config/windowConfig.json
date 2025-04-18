@@ -17,7 +17,7 @@
         "title": "mediaplayer",
         "icon": "./images/youtube.png",
         "content": "http://localhost:8000/mediaplayer",
-        "defaultWidth": 800,
-        "defaultHeight": 450
+        "defaultWidth": 300,
+        "defaultHeight": 300
     }
 }

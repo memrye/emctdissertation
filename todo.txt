@@ -17,3 +17,10 @@
 [X] fix/redesign chatroom
 
 [X] refactor to allow user to change colour and add option to login bar
+
+[X] fix login screen 
+
+[ ] finish mediaplayer
+- [ ] add interactions with max
+- [X] add seekbar
+- [X] make bars work with canvas instead of divs
