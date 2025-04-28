@@ -4,8 +4,8 @@ const configs = await getWindowConfigs();
 document.addEventListener('createNewWindow_chatroom', () => {
     createWindow('chatroom', configs.chatroom); 
 });
-document.addEventListener('createNewWindow_youtube', () => {
-    createWindow('youtube', configs.youtube); 
+document.addEventListener('createNewWindow_notes', () => {
+    createWindow('notes', configs.notes); 
 });
 document.addEventListener('createNewWindow_mediaplayer', () => {
     createWindow('mediaplayer', configs.mediaplayer); 
@@ -14,6 +14,8 @@ document.addEventListener('createNewWindow_mediaplayer', () => {
 window.zCounter = 1; 
 
 function createWindow(windowType, config) {
+
+    const noresize = config.attributes.includes("no-resize")
 
     const closeButton = document.createElement('button');
     closeButton.textContent = '×';
@@ -37,6 +39,7 @@ function createWindow(windowType, config) {
     windowBase.className = 'window-base';
     windowBase.style.width = `${config.defaultWidth}px`;
     windowBase.style.height = `${config.defaultHeight}px`;
+    if (noresize){windowBase.style.background = 'transparent'}
 
     //window content
     const iframe = document.createElement('iframe');
@@ -47,19 +50,16 @@ function createWindow(windowType, config) {
         border: none;
         background-color: transparent;
         border-bottom-left-radius: 8px;
-        border-bottom-right-radius: 16px;
+        border-bottom-right-radius: ${noresize ? "8" : "16"}px;
+        pointer-events: all;
     `;
     iframe.allowTransparency = "true";
 
-    //resize handle
-    const resizeHandle = document.createElement('div');
-    resizeHandle.className = 'resize-handle'
-
+    
     windowTop.appendChild(minimizeButton);
     windowTop.appendChild(closeButton);
     windowTop.appendChild(windowTitle);
 
-    windowBase.appendChild(resizeHandle);
     windowBase.appendChild(iframe);
 
     document.body.appendChild(windowBase);
@@ -70,13 +70,19 @@ function createWindow(windowType, config) {
     let currentY;
     let initialX;
     let initialY;
-    let xOffset = 0;
-    let yOffset = 0;
+    let xOffset;
+    let yOffset;
     let rafId = null;
 
+    // calculate initial center position
+    xOffset = Math.max(0, (window.innerWidth - config.defaultWidth) / 2);
+    yOffset = Math.max(0, (window.innerHeight - config.defaultHeight) / 3);
+    setDivPosition(xOffset, yOffset);
+    
     //track mouse position
     let mouseX = 0;
     let mouseY = 0;
+
     document.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
@@ -105,8 +111,7 @@ function createWindow(windowType, config) {
         }
         document.removeEventListener('mousemove', drag);
         document.removeEventListener('mouseup', stopDragging);
-        document.removeEventListener('mousemove', resize);
-        document.removeEventListener('mouseup', stopResizing);
+        
         windowBase.remove();
         windowTop.remove();
     });
@@ -114,15 +119,17 @@ function createWindow(windowType, config) {
 
     //drag interaction functions
     function startDragging(e) {
-        initialX = e.clientX - xOffset;
-        initialY = e.clientY - yOffset;
-
-        const kurwa = ++window.zCounter;
-        windowTop.style.zIndex =  kurwa;  
-        windowBase.style.zIndex = kurwa;
-        if ((e.target === windowTop || e.target === windowTitle) && !isDragging) {
+        const _zindex = ++window.zCounter;
+        windowTop.style.zIndex =  _zindex;  
+        windowBase.style.zIndex = _zindex;
+        iframe.style.pointerEvents = 'none';
+        if (e.target === windowTop || e.target === windowTitle) {
             isDragging = true;
             windowTop.style.cursor = 'grabbing';
+            
+            initialX = e.clientX - xOffset;
+            initialY = e.clientY - yOffset;
+            
             rafId = requestAnimationFrame(updatePosition);
         }  
     }
@@ -154,6 +161,7 @@ function createWindow(windowType, config) {
     }
 
     function stopDragging() {
+        iframe.style.pointerEvents = 'all';
         if (isDragging) {
             windowTop.style.cursor = 'default';
             initialX = currentX;
@@ -163,6 +171,12 @@ function createWindow(windowType, config) {
                 cancelAnimationFrame(rafId);
             }
         }
+    }
+
+    function setDivPosition(xPos, yPos) {
+        const yOff = 30;
+        windowTop.style.transform = `translate(${xPos}px, ${yPos}px)`;
+        windowBase.style.transform = `translate(${xPos}px, ${yPos + yOff}px)`;
     }
 
     // minimize button hover listeners
@@ -177,72 +191,6 @@ function createWindow(windowType, config) {
     // minimize button click listener
     minimizeButton.addEventListener('click', minimizeWindow);
 
-    function setDivPosition(xPos, yPos) {
-        const yOff = 30;
-        windowTop.style.transform = `translate(${xPos}px, ${yPos}px)`;
-        windowBase.style.transform = `translate(${xPos}px, ${yPos + yOff}px)`;
-    }
-
-    //resize interactions functions
-    let isResizing = false;
-    let initialWidth;
-    let initialHeight;
-
-    resizeHandle.addEventListener('mousedown', startResizing);
-    document.addEventListener('mousemove', resize);
-    document.addEventListener('mouseup', stopResizing);
-
-    function startResizing(e) {
-        isResizing = true;
-        initialX = e.clientX;
-        initialY = e.clientY;
-        initialWidth = parseInt(windowBase.style.width);
-        initialHeight = parseInt(windowBase.style.height);
-        e.stopPropagation();
-        rafId = requestAnimationFrame(updateResize);
-    }
-
-    function updateResize(e){
-        if (isResizing) {
-            const deltaX = mouseX - initialX;
-            const deltaY = mouseY - initialY;
-
-            const newWidth = Math.max(300, initialWidth + deltaX);
-            const newHeight = Math.max(300, initialHeight + deltaY);
-
-            const maxWidth = window.innerWidth - xOffset;
-            const maxHeight = window.innerHeight - yOffset;
-
-            const clampedWidth = Math.min(newWidth, maxWidth);
-            const clampedHeight = Math.min(newHeight, maxHeight);
-
-            const kurwa = ++window.zCounter;
-            windowTop.style.zIndex =  kurwa;  
-            windowBase.style.zIndex = kurwa;
-
-            windowBase.style.width = `${clampedWidth}px`;
-            windowTop.style.width = `${clampedWidth}px`;
-            windowBase.style.height = `${clampedHeight}px`;
-
-            rafId = requestAnimationFrame(updateResize);
-        }
-    }
-
-    function resize(e) {
-        if (isResizing) {
-            e.preventDefault();
-        }
-    }
-
-    function stopResizing() {
-        if (isResizing) {
-            isResizing = false;
-            if (rafId) {
-                cancelAnimationFrame(rafId);
-            }
-        }
-    }
-
     //minimize window listener
     document.addEventListener(`toggleMinimize_${windowType}`, () => {
         minimizeWindow();
@@ -256,5 +204,76 @@ function createWindow(windowType, config) {
             windowBase.style.display = 'none';
             windowTop.style.display = 'none';
         }
+    };
+
+    if(!noresize){
+
+        //resize handle
+        const resizeHandle = document.createElement('div');
+        resizeHandle.className = 'resize-handle'
+        windowBase.appendChild(resizeHandle);
+
+        //resize interactions functions
+        let isResizing = false;
+        let initialWidth;
+        let initialHeight;
+
+        resizeHandle.addEventListener('mousedown', startResizing);
+        document.addEventListener('mousemove', resize);
+        document.addEventListener('mouseup', stopResizing);
+
+        function startResizing(e) {
+            iframe.style.pointerEvents = 'none';
+            isResizing = true;
+            initialX = e.clientX;
+            initialY = e.clientY;
+            initialWidth = parseInt(windowBase.style.width);
+            initialHeight = parseInt(windowBase.style.height);
+            e.stopPropagation();
+            rafId = requestAnimationFrame(updateResize);
+        }
+
+        function updateResize(e){
+            if (isResizing) {
+                const deltaX = mouseX - initialX;
+                const deltaY = mouseY - initialY;
+
+                const newWidth = Math.max(300, initialWidth + deltaX);
+                const newHeight = Math.max(300, initialHeight + deltaY);
+
+                const maxWidth = window.innerWidth - xOffset;
+                const maxHeight = window.innerHeight - yOffset;
+
+                const clampedWidth = Math.min(newWidth, maxWidth);
+                const clampedHeight = Math.min(newHeight, maxHeight);
+
+                const kurwa = ++window.zCounter;
+                windowTop.style.zIndex =  kurwa;  
+                windowBase.style.zIndex = kurwa;
+
+                windowBase.style.width = `${clampedWidth}px`;
+                windowTop.style.width = `${clampedWidth}px`;
+                windowBase.style.height = `${clampedHeight}px`;
+
+                rafId = requestAnimationFrame(updateResize);
+            }
+        }
+
+        function resize(e) {
+            if (isResizing) {
+                e.preventDefault();
+            }
+        }
+
+        function stopResizing() {
+            iframe.style.pointerEvents = 'all';
+            if (isResizing) {
+                isResizing = false;
+                if (rafId) {
+                    cancelAnimationFrame(rafId);
+                }
+            }
+        }
     }
+
 };

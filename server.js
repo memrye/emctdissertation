@@ -76,10 +76,15 @@ io.on('connection', (socket) => {
         }, String(response).length * 50);
     });
 
-    //send RMS to mediaplayer
-    maxAPI.addHandler("rms", (values) => {
+
+    if (typeof(maxAPI) !== 'undefined') {
+        //send RMS to mediaplayer
+        maxAPI.addHandler("rms", (values) => {
         io.emit('rms', values.split(' '));
     });
+    } else {
+    }
+    
 
     // handle interactions
     socket.on('keydown', (key) => {
@@ -110,6 +115,10 @@ io.on('connection', (socket) => {
         outletToMax(`seekbar "${value}"`);
     });
 
+    socket.on('notepad_text', (value) => {
+        outletToMax(`notepad_text "${value}"`);
+    });
+
     // Handle disconnects
     socket.on('disconnect', () => {
 
@@ -128,6 +137,10 @@ app.get('/chatroom', (req, res) => {
 
 app.get('/mediaplayer', (req, res) => {
     res.render('mediaplayer');
+});
+
+app.get('/notepad', (req, res) => {
+    res.render('notepad');
 });
 
 app.get('/login', (req, res) => {

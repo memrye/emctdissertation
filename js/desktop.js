@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     getWindowConfigs().then(configs => {
         // create desktop icons
         createDesktopIcon('chatroom', 0, 0);
-        createDesktopIcon('youtube', 0, 1);
+        createDesktopIcon('notes', 0, 1);
         createDesktopIcon('mediaplayer', 0, 2);
     }).catch(error => console.error('Error initializing desktop:', error));
 

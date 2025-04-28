@@ -20,7 +20,13 @@
 
 [X] fix login screen 
 
-[ ] finish mediaplayer
-- [ ] add interactions with max
+[X] finish mediaplayer
+- [X] add interactions with max
 - [X] add seekbar
 - [X] make bars work with canvas instead of divs
+
+[ ] finish notepad
+ - [X] add multple notes
+ - [ ] sonify by using text to generate notes and position to change tembre
+
+[ ] add settings menu
