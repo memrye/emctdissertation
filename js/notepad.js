@@ -53,7 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     textarea.addEventListener('input', () => {
         notes[currentNoteIndex].content = textarea.value;
-        socket.emit('notepad_text', textarea.value);
+        const response = textarea.value == "" ? "." : textarea.value
+        socket.emit('notepad_text', response);
     });
 
     document.addEventListener('keydown', (e) => {
