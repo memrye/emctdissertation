@@ -1,10 +1,11 @@
 [X] store window information in json file
-- [] default position + size per window
+- [X] default position + size per window
 
 [X] randomise message response time / add fake "typing.." status
 - [X] create "users" with usernames (pfps?) and gpt prompts 
 
 [X] use groq ai interface instead of chatgpt
+- [ ] CHANGE THAT BC GROQ KINDA SUCKS
 
 [X] add sign-in / out function
 - [X] add start icon
@@ -15,6 +16,7 @@
 [X] add current time to taskbar
 
 [X] fix/redesign chatroom
+ - [X] DID IT AGAIN!!!
 
 [X] refactor to allow user to change colour and add option to login bar
 
@@ -25,8 +27,11 @@
 - [X] add seekbar
 - [X] make bars work with canvas instead of divs
 
-[ ] finish notepad
+[X] finish notepad
  - [X] add multple notes
- - [ ] sonify by using text to generate notes and position to change tembre
+ - [X] sonify by using text to generate notes and position to change tembre
 
-[ ] add settings menu
+[X] add settings menu
+ - [X] force sonification to use new scale 
+
+ 

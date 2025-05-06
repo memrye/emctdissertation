@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const colorSlider = document.getElementById('backgroundcolorslider');
     const backgroundHueshift = document.body
 
-    colorSlider.addEventListener('mousemove', (e) => {
+    function updateBackground(){
         let tempRGB = hsl2rgb(colorSlider.value, 0.2, 0.5);
         for (let i = 0; i < 3; i++){
             tempRGB[i] = tempRGB[i]*255
@@ -76,6 +76,11 @@ document.addEventListener('DOMContentLoaded', () => {
         backgroundHueshift.style.backgroundImage = `radial-gradient(rgb(${LtempRGB[0]}, ${LtempRGB[1]}, ${LtempRGB[2]}), rgb(${tempRGB[0]}, ${tempRGB[1]}, ${tempRGB[2]}),rgb(${DtempRGB[0]}, ${DtempRGB[1]}, ${DtempRGB[2]}))`;
 
         socket.emit('backgroundChanged', `${colorSlider.value}`)
+    }
+    requestAnimationFrame(updateBackground);
+
+    colorSlider.addEventListener('input', () => {
+        requestAnimationFrame(updateBackground);
     })
 
     const loginButton = document.getElementById('loginButton')

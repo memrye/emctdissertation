@@ -38,7 +38,7 @@ const { futimesSync } = require('fs');
 //get chat response from llama through groq api
 async function getResponse(userMessage, userPrompt) {
     const completion = await openai.chat.completions.create({
-        model: "llama3-70b-8192", 
+        model: "llama-3.3-70b-versatile", 
         messages: [
             { 
                 role: "system", 
@@ -49,8 +49,8 @@ async function getResponse(userMessage, userPrompt) {
                 content: userMessage,
             },
         ],
-        temperature: 0.7,
-        max_tokens: 100,
+        temperature: 1.1,
+        max_tokens: 2048,
         stream: false,
     });
     return completion.choices[0].message.content;
@@ -72,8 +72,8 @@ io.on('connection', (socket) => {
                 user: randomUser.username, 
                 message: response 
             });
-            outletToMax(`messenge_in "${response}"`);
-        }, String(response).length * 50);
+            
+        }, Math.max(Math.random()*6000, 1000));
     });
 
 
@@ -119,6 +119,18 @@ io.on('connection', (socket) => {
         outletToMax(`notepad_text "${value}"`);
     });
 
+    socket.on('windowclose', (value) => {
+        outletToMax(`windowclose "${value}"`);
+    });
+
+    socket.on('volumeChanged', (value) => {
+        outletToMax(`volumeChanged "${value}"`);
+    });
+
+    socket.on('messageIn', (response) => {
+        outletToMax(`messenge_in "${response}"`);
+    })
+
     // Handle disconnects
     socket.on('disconnect', () => {
 
@@ -145,6 +157,10 @@ app.get('/notepad', (req, res) => {
 
 app.get('/login', (req, res) => {
     res.render('login');
+});
+
+app.get('/settings', (req, res) => {
+    res.render('settings');
 });
 
 app.post('/login', (req, res) => {
@@ -187,7 +203,7 @@ function outletToMax(msg) {
     if (typeof(maxAPI) !== 'undefined') {
         maxAPI.outlet(msg);
     } else {
-        console.log(msg);
+        console.log(`No max API. msg: ${msg}`);
     }
 };
 

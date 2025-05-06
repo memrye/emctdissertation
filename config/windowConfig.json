@@ -3,13 +3,13 @@
         "title": "chatroom - refresh to meet someone new!",
         "icon": "./images/chat.png",
         "content": "http://localhost:8000/chatroom",
-        "defaultWidth": 370,
-        "defaultHeight": 500,
+        "defaultWidth": 350,
+        "defaultHeight": 480,
         "attributes": []
     },
     "mediaplayer": {
         "title": "mediaplayer",
-        "icon": "./images/youtube.png",
+        "icon": "./images/metro_30.png",
         "content": "http://localhost:8000/mediaplayer",
         "defaultWidth": 300,
         "defaultHeight": 300,
@@ -21,6 +21,22 @@
         "content": "http://localhost:8000/notepad",
         "defaultWidth": 250,
         "defaultHeight": 250,
+        "attributes": ["no-resize"]
+    },
+    "browser": {
+        "title": "browse the web!",
+        "icon": "./images/Globe2.png",
+        "content": "https://web.archive.org/web/20060422022506if_/http://www.msn.com/",
+        "defaultWidth": 800,
+        "defaultHeight": 600,
+        "attributes": []
+    },
+    "settings": {
+        "title": "settings",
+        "icon": "./images/computer.png",
+        "content": "http://localhost:8000/settings",
+        "defaultWidth": 500,
+        "defaultHeight": 400,
         "attributes": ["no-resize"]
     }
 }

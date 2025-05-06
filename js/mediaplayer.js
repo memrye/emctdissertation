@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
+    
 
     const bands = Array(8).fill().map(() => ({
         current: 0,
@@ -71,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateSeekbar() {
+        socket.emit('isPlaying', isPlaying);
         if (!isPlaying){
             return;
         }
@@ -88,7 +90,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
-    socket.emit('isPlaying', isPlaying);
+    const prevButton = document.querySelector(`#playback-controls > button:nth-child(1)`);
+
+    prevButton.addEventListener('mouseenter', () => {
+        socket.emit('mouseover', 'prevButton')
+    })
+
+    prevButton.addEventListener('mousedown', () => {
+        seekbar.value = 0;
+    })
+
+    const nextButton = document.querySelector(`#playback-controls > button:nth-child(3)`);
+
+    nextButton.addEventListener('mouseenter', () => {
+        socket.emit('mouseover', 'nextButton')
+    })
+
+    nextButton.addEventListener('mousedown', () => {
+        seekbar.value = 512;
+    })
+
+    document.addEventListener('keydown', (e) => {
+        socket.emit('keydown', e.key);
+    });
+
     requestAnimationFrame(updateSeekbar);
     requestAnimationFrame(drawSpectrum);
 });

@@ -6,23 +6,29 @@ const socket = io();
 document.addEventListener('DOMContentLoaded', () => {
 
     
-    setBackgroundColor();
+    setBackgroundColor(userData.color);
     createTaskbar();
     getWindowConfigs().then(configs => {
         // create desktop icons
         createDesktopIcon('chatroom', 0, 0);
         createDesktopIcon('notes', 0, 1);
         createDesktopIcon('mediaplayer', 0, 2);
+        createDesktopIcon('browser', 0, 3);
+        createDesktopIcon('settings', 1, 0);
     }).catch(error => console.error('Error initializing desktop:', error));
 
     socket.emit('windowstate', 'desktop');
 
     window.addEventListener('keydown', e => e.key === 'F8' && (window.location.href = '/logout'))
 
-    document.addEventListener('keydown', (e) => {
+    window.addEventListener('keydown', (e) => {
         socket.emit('keydown', e.key);
     });
 
+});
+
+window.addEventListener('colorChanged', (e) => {
+    setBackgroundColor(e.detail);
 });
 
 async function createDesktopIcon(buttonType, xOff, yOff) {
@@ -46,7 +52,7 @@ async function createDesktopIcon(buttonType, xOff, yOff) {
             // add taskbar button
             addTaskbarButton(buttonType);
             // create event to open a new window
-            const createWindowEvent = new CustomEvent(`createNewWindow_${buttonType}`);
+            const createWindowEvent = new CustomEvent("createNewWindow", { detail: buttonType });
             document.dispatchEvent(createWindowEvent);
         }
     });
@@ -106,14 +112,18 @@ function createTaskbar() {
         if (yPos === -340){
             startMenuDock.style.bottom = `0px`
             createStartMenu();
-        } else {
+        } 
+    });
+
+    document.addEventListener('click', (e)=>{
+        if ((!startMenuDock.contains(e.target)) && parseInt(window.getComputedStyle(startMenuDock).bottom) === 0){
             startMenuDock.style.bottom = `-340px`
             const closeDelay = parseFloat(window.getComputedStyle(startMenuDock).transitionDuration)
             setTimeout(() => {
                 closeStartMenu();
             }, closeDelay * 1000);
         }
-    });
+    })
 
     startMenuDock.appendChild(startButton);
     taskbar.appendChild(buttonContainer);
@@ -253,10 +263,8 @@ function removeTaskbarButton(windowType) {
 }
 
 //SET BACKGROUND COLOUR **************************************
-function setBackgroundColor(){
+function setBackgroundColor(color){
     const backgroundHueshift = document.body;
-    const color = userData.color;
-    console.log(userData)
 
     let tempRGB = hsl2rgb(color, 0.2, 0.5);
     for (let i = 0; i < 3; i++){
@@ -270,7 +278,9 @@ function setBackgroundColor(){
     for (let i = 0; i < 3; i++){
         LtempRGB[i] = LtempRGB[i]*255
     }
-        backgroundHueshift.style.backgroundImage = `radial-gradient(rgb(${LtempRGB[0]}, ${LtempRGB[1]}, ${LtempRGB[2]}), rgb(${tempRGB[0]}, ${tempRGB[1]}, ${tempRGB[2]}),rgb(${DtempRGB[0]}, ${DtempRGB[1]}, ${DtempRGB[2]}))`;
+    
+    backgroundHueshift.style.backgroundImage = `radial-gradient(rgb(${LtempRGB[0]}, ${LtempRGB[1]}, ${LtempRGB[2]}), rgb(${tempRGB[0]}, ${tempRGB[1]}, ${tempRGB[2]}),rgb(${DtempRGB[0]}, ${DtempRGB[1]}, ${DtempRGB[2]}))`;
+    socket.emit('backgroundChanged', color);
 }
 
 

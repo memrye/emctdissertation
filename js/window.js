@@ -1,14 +1,12 @@
 import { getWindowConfigs } from './configManager.js';
 const configs = await getWindowConfigs();
+const socket = io();
 
-document.addEventListener('createNewWindow_chatroom', () => {
-    createWindow('chatroom', configs.chatroom); 
-});
-document.addEventListener('createNewWindow_notes', () => {
-    createWindow('notes', configs.notes); 
-});
-document.addEventListener('createNewWindow_mediaplayer', () => {
-    createWindow('mediaplayer', configs.mediaplayer); 
+document.addEventListener('createNewWindow', (e) => {
+    const configsArray = Object.getOwnPropertyNames(configs)
+    if (configsArray.includes(e.detail)){
+        createWindow(e.detail, configs[e.detail]); 
+    };
 });
 
 window.zCounter = 1; 
@@ -52,9 +50,12 @@ function createWindow(windowType, config) {
         border-bottom-left-radius: 8px;
         border-bottom-right-radius: ${noresize ? "8" : "16"}px;
         pointer-events: all;
+        target: '_self';
     `;
     iframe.allowTransparency = "true";
 
+    windowTop.style.zIndex =  window.zCounter;  
+    windowBase.style.zIndex = window.zCounter;
     
     windowTop.appendChild(minimizeButton);
     windowTop.appendChild(closeButton);
@@ -111,6 +112,8 @@ function createWindow(windowType, config) {
         }
         document.removeEventListener('mousemove', drag);
         document.removeEventListener('mouseup', stopDragging);
+
+        socket.emit('windowclose', windowType);
         
         windowBase.remove();
         windowTop.remove();
