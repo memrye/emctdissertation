@@ -43,7 +43,7 @@
     padding-left: 10px;
     padding-right: 0px;
     background: linear-gradient(rgba(230, 223, 255, 0.3) 0%, rgba(230, 223, 255, 0.05) 50%, transparent 50%);
-    backdrop-filter: blur(4px) brightness(90%);
+    backdrop-filter: contrast(70%) brightness(80%) blur(4px);
     outline: 1px solid rgba(255, 255, 255, 0.21);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     clip-path: polygon(0% -50%, 0% 100%, 100% 100%, 100% 0%);
@@ -107,7 +107,7 @@
     align-items: stretch;
     padding: 0px;
     background: linear-gradient(rgba(230, 223, 255, 0.3) 0%, rgba(230, 223, 255, 0.05) 7.5%, transparent 7.5%);
-    backdrop-filter: blur(4px) brightness(90%);
+    backdrop-filter: contrast(70%) brightness(80%) blur(4px);
     outline: 1px solid rgba(255, 255, 255, 0.21);
     border-right: 1px solid rgba(255, 255, 255, 0.21);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -179,9 +179,54 @@
     box-shadow: inset 0 0.4px 1px rgba(0, 0, 0, 0.3);
     background: rgba(0, 0, 0, 0.05);
     border-radius: 10px;
-    overflow: auto;
-    user-select: none;
     margin-left: 3%;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 5px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.start-menu-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    gap: 15px;
+    cursor: pointer;
+    border-radius: 8px;
+    background: radial-gradient(circle at 50% 180%, rgba(0,0,0, 0.3) 0%, transparent 60%);
+    transition: background-color 0.2s;
+    width: 100%;
+    height: 40px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border: 0px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.start-menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.start-menu-item-icon {
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.start-menu-item-text {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 47px);
 }
 
 .start-menu-sidebar {
@@ -249,7 +294,7 @@
     position: absolute;
     height: 30px;
     background: linear-gradient(rgba(230, 223, 255, 0.3) 0%, rgba(230, 223, 255, 0.05) 50%, transparent 50%);
-    backdrop-filter: blur(4px) brightness(90%);
+    backdrop-filter: contrast(70%) brightness(80%) blur(4px);
     -webkit-backdrop-filter: blur(5.4px);
     border-radius: 10px;
     outline: 1px solid rgba(255, 255, 255, 0.21);
@@ -743,24 +788,6 @@
     font-size: 14px;
 }
 
-#profile-splash {
-    position: fixed;
-    background-image: url('/images/metro_16.png');
-    background-repeat: no-repeat;
-    background-size: 120%;
-    background-position: 150% -50%;
-    top: -60%;
-    left: -50%;
-    width: 300%;
-    height: 200%;
-    opacity: 0.9;
-    pointer-events: none;
-    z-index: -1;
-    transform: scaleY(-1) rotate(15deg);
-    filter: brightness(300%) invert();
-    opacity: 0.5;
-}
-
 #refresh-button-container {
     position: fixed;
     top: 5%;
@@ -825,6 +852,22 @@
     color: white;
     text-shadow: 0 0 3px rgb(0, 0, 0);
     user-select: none;
+}
+
+#splash-horizontal-chatroom{
+    position: absolute;
+    width: 110%;
+    height: 100%;
+    bottom: -38%;
+    background-image: url(/images/metro_18.png);
+    background-size: 110%;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    filter: contrast(10%) hue-rotate(-110deg);
+    z-index: 3;
+    mix-blend-mode: color-dodge;
+    opacity: 60%;
+    transform: rotate(10deg);
 }
 
 
@@ -898,7 +941,7 @@
     display: flex;
     width: 80%;
     height: 90%;
-    background: linear-gradient(to left, rgb(220, 220, 220) 0%, white 50%, rgb(220, 220, 220) 100%);
+    background: linear-gradient(rgba(230, 223, 255, 0.3) 0%, rgba(230, 223, 255, 0.05) 50%, transparent 50%);
     filter: drop-shadow(0 5px 5px rgba(0,0,0,0.15));
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
@@ -909,6 +952,7 @@
     padding: 0 5%;
     align-items: center;
     justify-content: space-between;
+    backdrop-filter: contrast(70%) blur(4px);
 }
 
 #playback-button{
@@ -955,10 +999,10 @@
     top: -30px;
     aspect-ratio: 1 / 1;
     border-radius: 50%;
-    background: radial-gradient(circle at 50% 70%, rgb(112, 174, 209) 0%, rgb(17, 131, 197) 60%);
+    background: radial-gradient(circle at 50% 70%, rgb(198, 132, 211) 0%, rgb(159, 72, 199) 60%);
     border: 0px;
     box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.3);
-    filter: brightness(110%) drop-shadow(0 0 10px rgba(0, 0, 0, 0.6));
+    filter: brightness(115%) drop-shadow(0 0 10px rgba(0, 0, 0, 0.6));
     outline: 1px solid rgba(255, 255, 255, 0);
     color: white;
     justify-content: center;
@@ -987,7 +1031,7 @@
 }
 
 #play-pause-button:hover{
-    filter: brightness(115%) drop-shadow(0 0 10px rgba(0, 0, 0, 0.6));
+    filter: brightness(120%) drop-shadow(0 0 10px rgba(0, 0, 0, 0.6));
 }
 
 #play-pause-button:active{
@@ -1025,14 +1069,23 @@
     background: rgb(255,255,255);
     border: 0;
     cursor: pointer;
-    box-shadow: -407px 0 0 400px rgb(17, 131, 197);
+    box-shadow: -407px 0 0 400px rgb(167, 90, 202);
 }
 
-#speaker-splash img{
+#mediaplayer-splash{
     display: block;
     position: absolute;
-    left: 0;
-    top: 0;
+    left: 2%;
+    bottom: -15%;
+    width: 100%;
+    height: 100%;
+    background-image: url(/images/metro_3.png);
+    background-size: 130%;
+    background-position: 20% 20%;
+    background-repeat: no-repeat;    
+    filter: saturate(200%) hue-rotate(80deg);
+    mix-blend-mode: multiply;
+    transform: rotate(14deg);
 }
 
 /* notepad styles */
@@ -1183,6 +1236,22 @@
 
 @keyframes spin { 100% { -moz-transform: rotate(360deg); } }
 
+#splash-horizontal{
+    position: absolute;
+    width: 110%;
+    height: 100%;
+    bottom: -10%;
+    background-image: url(/images/metro_18.png);
+    background-size: 110%;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    filter: contrast(10%) hue-rotate(-110deg);
+    z-index: 3;
+    mix-blend-mode: color-dodge;
+    opacity: 60%;
+    transform: rotate(10deg);
+}
+
 .settings-content {
     position: relative;
     width: 100%;
@@ -1244,12 +1313,13 @@
     transition: all 0.1s;
     cursor: pointer;
     user-select: none;
+    filter: contrast(90%) brightness(90%);
 }
 
 .settings-navbar-option:checked + .settings-navbar-label {
-    background: radial-gradient(circle at center, rgba(255,255,255,0.3) 0%, transparent 70%);
-    filter: brightness(110%);
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+    background: radial-gradient(circle at center, transparent 0%, rgba(255,255,255,0.1) 70%);
+    filter: brightness(100%) contrast(100%);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
     transform: scaleY(1.02);
 }
 
@@ -1258,9 +1328,9 @@
 }
 
 .settings-navbar-label:active {
-    box-shadow: inset 0 0 20px rgba(255,255,255, 0.3);
-    filter: contrast(100%) brightness(110%);
-    text-shadow: 0 0 5px rgba(255,255,255, 1);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+    filter: brightness(200%) contrast(200%) ;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 1);
 }
 
 #settings-content-inset {
@@ -1296,4 +1366,17 @@
     border: 0;
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
     cursor: pointer;
+}
+
+/* fishtank styles */
+
+#fishtank-body {
+    width: 100%;
+    height: 100%;
+}
+
+#fishtank-body canvas {
+    pointer-events: none;
+    mix-blend-mode: screen;
+    opacity: 0.7;
 }

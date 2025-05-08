@@ -11,8 +11,8 @@
         "title": "mediaplayer",
         "icon": "./images/metro_30.png",
         "content": "http://localhost:8000/mediaplayer",
-        "defaultWidth": 300,
-        "defaultHeight": 300,
+        "defaultWidth": 380,
+        "defaultHeight": 350,
         "attributes": []
     },
     "notes": {
@@ -37,6 +37,62 @@
         "content": "http://localhost:8000/settings",
         "defaultWidth": 500,
         "defaultHeight": 400,
+        "attributes": ["no-resize"]
+    },
+    "fishtank": {
+        "title": "fishtank",
+        "icon": "./images/fish.png",
+        "content": "http://localhost:8000/fishtank",
+        "defaultWidth": 250,
+        "defaultHeight": 250,
+        "attributes": ["no-resize"]
+    },
+    "longhorn": {
+        "title": "longhorn.png",
+        "icon": "./images/photo.png",
+        "content": "http://localhost:8000/images/longhorn.png",
+        "defaultWidth": 512,
+        "defaultHeight": 384,
+        "attributes": []
+    },
+    "djpon3": {
+        "title": "djpon3.png",
+        "icon": "./images/photo.png",
+        "content": "http://localhost:8000/images/djpon3.png",
+        "defaultWidth": 720,
+        "defaultHeight": 450,
+        "attributes": []
+    },
+    "domo": {
+        "title": "domo.jpg",
+        "icon": "./images/photo.png",
+        "content": "http://localhost:8000/images/domo.jpg",
+        "defaultWidth": 512,
+        "defaultHeight": 384,
+        "attributes": []
+    },
+    "lain": {
+        "title": "lain",
+        "icon": "./images/exec.png",
+        "content": "https://3d.laingame.net/#/game",
+        "defaultWidth": 800,
+        "defaultHeight": 650,
+        "attributes": ["no-resize"]
+    },
+    "micvid": {
+        "title": "mynewmicrophone.mp4",
+        "icon": "./images/film.png",
+        "content": "https://www.youtube.com/embed/iRThyHhhTdg",
+        "defaultWidth": 480,
+        "defaultHeight": 360,
+        "attributes": ["no-resize"]
+    },
+    "stillalive": {
+        "title": "Still Alive - Lisa Miskovsky.mp4",
+        "icon": "./images/film.png",
+        "content": "https://www.youtube.com/embed/SzmUde_EK5Y",
+        "defaultWidth": 480,
+        "defaultHeight": 360,
         "attributes": ["no-resize"]
     }
 }

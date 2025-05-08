@@ -57,23 +57,57 @@ async function getResponse(userMessage, userPrompt) {
 }
 
 io.on('connection', (socket) => {
-
     const randomUser = chatUsers[Math.floor(Math.random() * chatUsers.length)];
     socket.emit('assigned user', randomUser);
 
-    // listen for chat messages
-    socket.on('chat message', async (msg) => {
-        outletToMax(`user "${msg}"`);
-        io.emit('chat message', { user: 'You', message: msg });
+    let isProcessing = false;
+    let messageQueue = [];
 
-        const response = await getResponse(msg, randomUser.prompt);
-        setTimeout(() => {
+    async function processMessageQueue() {
+        if (messageQueue.length === 0 || isProcessing) return;
+        
+        isProcessing = true;
+        const msg = messageQueue.shift();
+
+        try {
+            // Emit user message with unique ID
+            const messageId = Date.now().toString();
             io.emit('chat message', { 
-                user: randomUser.username, 
-                message: response 
+                id: messageId,
+                user: 'You', 
+                message: msg,
+                status: 'sent'
             });
             
-        }, Math.max(Math.random()*6000, 1000));
+            // Get AI response
+            const response = await getResponse(msg, randomUser.prompt);
+            
+            // Add random delay before AI response
+            setTimeout(() => {
+                io.emit('chat message', { 
+                    id: messageId + '_response',
+                    user: randomUser.username, 
+                    message: response,
+                    status: 'response'
+                });
+                
+                isProcessing = false;
+                processMessageQueue(); // Process next message if any
+            }, Math.max(Math.random() * 6000, 1000));
+
+        } catch (error) {
+            console.error('Error processing message:', error);
+            isProcessing = false;
+            processMessageQueue();
+        }
+    }
+
+    // listen for chat messages
+    socket.on('chat message', async (msg) => {
+        console.log(`msg rcv ${msg}`)
+        outletToMax(`user "${msg}"`);
+        messageQueue.push(msg);
+        processMessageQueue();
     });
 
 
@@ -131,6 +165,10 @@ io.on('connection', (socket) => {
         outletToMax(`messenge_in "${response}"`);
     })
 
+    socket.on('fishtank', (values) => {
+        outletToMax(`fishtank "${values}"`);
+    })
+
     // Handle disconnects
     socket.on('disconnect', () => {
 
@@ -161,6 +199,10 @@ app.get('/login', (req, res) => {
 
 app.get('/settings', (req, res) => {
     res.render('settings');
+});
+
+app.get('/fishtank', (req, res) => {
+    res.render('fishtank');
 });
 
 app.post('/login', (req, res) => {

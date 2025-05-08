@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     setBackgroundColor(userData.color);
     createTaskbar();
+    setupWindowCloseListeners();
     getWindowConfigs().then(configs => {
         // create desktop icons
         createDesktopIcon('chatroom', 0, 0);
@@ -15,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         createDesktopIcon('mediaplayer', 0, 2);
         createDesktopIcon('browser', 0, 3);
         createDesktopIcon('settings', 1, 0);
+        createDesktopIcon('domo', 1, 5);
     }).catch(error => console.error('Error initializing desktop:', error));
 
     socket.emit('windowstate', 'desktop');
@@ -30,6 +32,21 @@ document.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('colorChanged', (e) => {
     setBackgroundColor(e.detail);
 });
+
+async function setupWindowCloseListeners() {
+    const configs = await getWindowConfigs();
+    
+    Object.keys(configs).forEach(windowType => {
+        document.addEventListener(`closeWindow_${windowType}`, () => {
+            const index = openWindows.indexOf(windowType);
+            if (index > -1) {
+                openWindows.splice(index, 1);
+                removeTaskbarButton(windowType);
+            }
+        });
+    });
+}
+
 
 async function createDesktopIcon(buttonType, xOff, yOff) {
     // load window configs
@@ -57,14 +74,6 @@ async function createDesktopIcon(buttonType, xOff, yOff) {
         }
     });
 
-    //close listener 
-    document.addEventListener(`closeWindow_${buttonType}`, () => {
-        const index = openWindows.indexOf(buttonType);
-        if (index > -1) {
-            openWindows.splice(index, 1);
-            removeTaskbarButton(buttonType);
-        }
-    });
     document.body.appendChild(desktopIcon);
 };
 
@@ -133,7 +142,7 @@ function createTaskbar() {
 }
 
 //CREATE START MENU *****************************************
-function createStartMenu() {
+async function createStartMenu() {
     const startMenuDock = document.getElementById('start-menu-dock');
 
     const sideMenuUsername = document.createElement('div');
@@ -144,6 +153,48 @@ function createStartMenu() {
     const startMenuContent = document.createElement('div');
     startMenuContent.id = 'start-menu-content';
     startMenuContent.className = 'start-menu-content';
+
+    const configs = await getWindowConfigs();
+    Object.entries(configs).forEach(([windowType, config]) => {
+        const menuItem = document.createElement('div');
+        menuItem.className = 'start-menu-item';
+        
+        const iconContainer = document.createElement('div');
+        iconContainer.className = 'start-menu-item-icon';
+        iconContainer.style.backgroundImage = `url('${config.icon}')`;
+        
+        const textContainer = document.createElement('div');
+        textContainer.className = 'start-menu-item-text';
+        textContainer.textContent = config.title;
+
+        menuItem.appendChild(iconContainer);
+        menuItem.appendChild(textContainer);
+
+        menuItem.addEventListener('click', () => {
+            if (!openWindows.includes(windowType)) {
+                openWindows.push(windowType);
+                addTaskbarButton(windowType);
+
+                const createWindowEvent = new CustomEvent("createNewWindow", { 
+                    detail: windowType 
+                });
+                document.dispatchEvent(createWindowEvent);
+                
+
+                startMenuDock.style.bottom = `-340px`;
+                const closeDelay = parseFloat(window.getComputedStyle(startMenuDock).transitionDuration);
+                setTimeout(() => {
+                    closeStartMenu();
+                }, closeDelay * 1000);
+            }
+        });
+
+        menuItem.addEventListener('mouseenter', () => {
+            socket.emit('mouseover', 'startMenuContent')
+        })
+
+        startMenuContent.appendChild(menuItem);
+    });
 
     const startMenuSidebar = document.createElement('div');
     startMenuSidebar.id = 'start-menu-sidebar';
