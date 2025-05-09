@@ -26,7 +26,7 @@
     "browser": {
         "title": "browse the web!",
         "icon": "./images/Globe2.png",
-        "content": "https://web.archive.org/web/20060422022506if_/http://www.msn.com/",
+        "content": "https://www.instagram.com/onthebounddd/",
         "defaultWidth": 800,
         "defaultHeight": 600,
         "attributes": []
@@ -47,14 +47,6 @@
         "defaultHeight": 250,
         "attributes": ["no-resize"]
     },
-    "longhorn": {
-        "title": "longhorn.png",
-        "icon": "./images/photo.png",
-        "content": "http://localhost:8000/images/longhorn.png",
-        "defaultWidth": 512,
-        "defaultHeight": 384,
-        "attributes": []
-    },
     "djpon3": {
         "title": "djpon3.png",
         "icon": "./images/photo.png",
@@ -67,6 +59,14 @@
         "title": "domo.jpg",
         "icon": "./images/photo.png",
         "content": "http://localhost:8000/images/domo.jpg",
+        "defaultWidth": 512,
+        "defaultHeight": 384,
+        "attributes": []
+    },
+    "longhorn": {
+        "title": "longhorn.png",
+        "icon": "./images/photo.png",
+        "content": "http://localhost:8000/images/longhorn.png",
         "defaultWidth": 512,
         "defaultHeight": 384,
         "attributes": []

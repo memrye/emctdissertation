@@ -62,7 +62,7 @@ async function createDesktopIcon(buttonType, xOff, yOff) {
     desktopIcon.style.transform = `translate(${xOff*80}px, ${yOff*80}px)`;
 
     // click listener
-    desktopIcon.addEventListener('click', () => {
+    desktopIcon.addEventListener('dblclick', () => {
         if (!openWindows.includes(buttonType)) {
             // add window to open window list
             openWindows.push(buttonType);
