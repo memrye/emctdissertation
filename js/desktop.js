@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         createDesktopIcon('browser', 0, 3);
         createDesktopIcon('settings', 1, 0);
         createDesktopIcon('domo', 1, 5);
+        createDesktopIcon('fishtank', 1, 6);
     }).catch(error => console.error('Error initializing desktop:', error));
 
     socket.emit('windowstate', 'desktop');

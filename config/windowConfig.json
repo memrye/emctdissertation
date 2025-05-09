@@ -26,7 +26,7 @@
     "browser": {
         "title": "browse the web!",
         "icon": "./images/Globe2.png",
-        "content": "https://www.instagram.com/onthebounddd/",
+        "content": "http://localhost:8000/images/insta.png",
         "defaultWidth": 800,
         "defaultHeight": 600,
         "attributes": []

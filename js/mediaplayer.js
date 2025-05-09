@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     socket.on('rms', (values) => {
         bands.forEach((band, i) => {
-            band.target = ((values[i]+1)*2)/350;
+            band.target = ((values[i]+1)*4)/350;
         });
     });
 

@@ -22,11 +22,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function createTypingIndicator(username) {
-        const typingElement = document.createElement('span');
-        typingElement.classList.add('typing-message');
-        typingElement.innerHTML = `${username} is typing...`;
+        let typingElement = document.getElementById('typing-message');
+        if (typingElement === null){
+            typingElement = document.createElement('span');
+            typingElement.id = 'typing-message'
+            typingElement.classList.add('typing-message');
+            typingElement.innerHTML = `${username} is typing...`;
+        } 
         return typingElement;
+        
     }
+
+    let typingTimeout = null;
 
     socket.on('chat message', (data) => {
         if (data.status === 'sent') {
@@ -38,11 +45,19 @@ document.addEventListener('DOMContentLoaded', () => {
             chat.appendChild(messageElement);
             chat.scrollTop = chat.scrollHeight;
         } else if (data.status === 'response' && data.user === currentUser.username) {
+            // clear any existing typing indicators
+            clearTimeout(typingTimeout);
+            const existingIndicators = chat.querySelectorAll('.typing-message');
+            existingIndicators.forEach(el => el.remove());
+
+            // create new typing indicator
             const typingIndicator = createTypingIndicator(data.user);
             chat.appendChild(typingIndicator);
             chat.scrollTop = chat.scrollHeight;
-    
-            setTimeout(() => {
+
+            const typingDuration = data.message.length * 100;
+
+            typingTimeout = setTimeout(() => {
                 typingIndicator.remove();
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('message', 'other-message');
@@ -51,16 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 chat.appendChild(messageElement);
                 chat.scrollTop = chat.scrollHeight;
                 socket.emit('messageIn', data.message);
-                
-                isWaitingForResponse = false;
-    
-                if (pendingMessages.length > 0) {
-                    
-                    const nextMessage = pendingMessages.shift();
-                    socket.emit('messageIn', nextMessage);
-                    isWaitingForResponse = true;
-                }
-            }, data.message.length * 50);
+            }, typingDuration);
         }
     });
 
@@ -68,14 +74,10 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const message = messageInput.value.trim();
         
-        if (message && !isWaitingForResponse) {
-            isWaitingForResponse = true;
+        if (message) {
             socket.emit('chat message', message);
             messageInput.value = '';
             socket.emit('mouseover', 'messageSent');
-        } else if (message) {
-            pendingMessages.push(message);
-            messageInput.value = '';
         }
     });
 

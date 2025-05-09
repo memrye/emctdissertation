@@ -61,53 +61,58 @@ io.on('connection', (socket) => {
     socket.emit('assigned user', randomUser);
 
     let isProcessing = false;
-    let messageQueue = [];
+    let latestMessage = null;
 
-    async function processMessageQueue() {
-        if (messageQueue.length === 0 || isProcessing) return;
-        
+    async function processMessage(msg) {
+        if (isProcessing) {
+            latestMessage = msg;
+            return;
+        }
+
         isProcessing = true;
-        const msg = messageQueue.shift();
+        const messageId = Date.now().toString();
 
         try {
-            // Emit user message with unique ID
-            const messageId = Date.now().toString();
-            io.emit('chat message', { 
+            // Emit user message
+            socket.emit('chat message', {
                 id: messageId,
-                user: 'You', 
+                user: 'You',
                 message: msg,
                 status: 'sent'
             });
-            
+
             // Get AI response
             const response = await getResponse(msg, randomUser.prompt);
-            
-            // Add random delay before AI response
-            setTimeout(() => {
-                io.emit('chat message', { 
+
+            // Only send response if this is still the latest message
+            if (latestMessage === null) {
+                socket.emit('chat message', {
                     id: messageId + '_response',
-                    user: randomUser.username, 
+                    user: randomUser.username,
                     message: response,
                     status: 'response'
                 });
-                
-                isProcessing = false;
-                processMessageQueue(); // Process next message if any
-            }, Math.max(Math.random() * 6000, 1000));
+            }
 
         } catch (error) {
             console.error('Error processing message:', error);
+        } finally {
             isProcessing = false;
-            processMessageQueue();
+            
+            // Process latest message if one was received while processing
+            if (latestMessage !== null) {
+                const messageToProcess = latestMessage;
+                latestMessage = null;
+                await processMessage(messageToProcess);
+            }
         }
     }
 
     // listen for chat messages
     socket.on('chat message', async (msg) => {
-        console.log(`msg rcv ${msg}`)
+        console.log(`msg rcv ${msg}`);
         outletToMax(`user "${msg}"`);
-        messageQueue.push(msg);
-        processMessageQueue();
+        await processMessage(msg);
     });
 
 
@@ -115,8 +120,9 @@ io.on('connection', (socket) => {
         //send RMS to mediaplayer
         maxAPI.addHandler("rms", (values) => {
         io.emit('rms', values.split(' '));
-    });
+        });
     } else {
+        
     }
     
 

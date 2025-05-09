@@ -849,6 +849,7 @@
 }
 
 .typing-message {
+    position: absolute;
     color: white;
     text-shadow: 0 0 3px rgb(0, 0, 0);
     user-select: none;
@@ -1049,13 +1050,13 @@
 .slider{
     appearance: none;
     width: 100%; 
-    height: 4px;
+    height: 8px;
     background: rgba(0, 0, 0, 0.1); 
     outline: none; 
     border-radius: 8px;
     z-index: 1;
     box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.3);
-    filter: drop-shadow(0 0 5px rgba(0,0,0,0.2));
+    filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
     border: none;
     overflow: clip;
     outline: 1px solid rgba(255, 255, 255, 0.2);
@@ -1063,13 +1064,34 @@
 }
 
 .slider::-moz-range-thumb {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: rgb(255,255,255);
+    width: 10px;
+    height: 10px;
+    border-radius: 0px;
+    background: transparent;
     border: 0;
     cursor: pointer;
-    box-shadow: -407px 0 0 400px rgb(167, 90, 202);
+    box-shadow: -407px 0 0 400px rgb(240, 240, 240);
+    transition: all 0.1s;
+}
+
+.slider::-moz-range-thumb:hover{
+    width: 15px;
+    height: 10px;
+    border-radius: 10px;
+    background:rgba(198, 132, 211, 0.8);
+    border: 0;
+    cursor: pointer;
+    box-shadow: -407px 0 0 400px rgb(240, 240, 240);
+}
+
+.slider::-moz-range-thumb:active{
+    width: 15px;
+    height: 10px;
+    border-radius: 10px;
+    background:rgba(159, 72, 199, 0.8);
+    border: 0;
+    cursor: pointer;
+    box-shadow: -407px 0 0 400px rgb(240, 240, 240);
 }
 
 #mediaplayer-splash{
