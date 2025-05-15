@@ -7,9 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileImageContainer = document.getElementById('profile-imagecontainer');
     const usernameDisplay = document.getElementById('profile-username');
 
-    let isWaitingForResponse = false;
     let currentUser = null;
-    let pendingMessages = [];
 
     socket.on('assigned user', (userData) => {
         currentUser = userData;
@@ -17,8 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
         usernameDisplay.textContent = userData.username;
         // clear chat when new user is assigned
         chat.innerHTML = '';
-        pendingMessages = [];
-        isWaitingForResponse = false;
     });
 
     function createTypingIndicator(username) {

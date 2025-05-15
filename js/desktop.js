@@ -256,9 +256,7 @@ function createSidebarButton(id, text) {
 async function addTaskbarButton(windowType) {
     const config = (await getWindowConfigs())[windowType];
     const buttonContainer = document.getElementById('taskbar-buttons');
-    const taskbar = document.getElementById('taskbar');
     const taskButton = document.createElement('button');
-    //taskButton.textContent = windowType;
     taskButton.id = `taskbar-${windowType}`;
     taskButton.style.cssText = `
         height: 50px;
@@ -288,7 +286,6 @@ async function addTaskbarButton(windowType) {
     `;
     taskButton.appendChild(taskButtonImage);
 
-    // Add hover effect
     taskButton.addEventListener('mouseover', () => {
         taskButton.style.backgroundColor = 'rgba(165, 165, 165, 0.2)';
     });

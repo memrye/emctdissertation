@@ -73,7 +73,6 @@ io.on('connection', (socket) => {
         const messageId = Date.now().toString();
 
         try {
-            // Emit user message
             socket.emit('chat message', {
                 id: messageId,
                 user: 'You',
@@ -81,10 +80,8 @@ io.on('connection', (socket) => {
                 status: 'sent'
             });
 
-            // Get AI response
             const response = await getResponse(msg, randomUser.prompt);
 
-            // Only send response if this is still the latest message
             if (latestMessage === null) {
                 socket.emit('chat message', {
                     id: messageId + '_response',
@@ -99,7 +96,6 @@ io.on('connection', (socket) => {
         } finally {
             isProcessing = false;
             
-            // Process latest message if one was received while processing
             if (latestMessage !== null) {
                 const messageToProcess = latestMessage;
                 latestMessage = null;
@@ -175,7 +171,7 @@ io.on('connection', (socket) => {
         outletToMax(`fishtank "${values}"`);
     })
 
-    // Handle disconnects
+    // handle disconnects
     socket.on('disconnect', () => {
 
     });
@@ -255,7 +251,7 @@ function outletToMax(msg) {
     }
 };
 
-// Start the server
+// start the server
 server.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}/login`);
 });

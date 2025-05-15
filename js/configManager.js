@@ -1,7 +1,7 @@
 let windowConfigs = null;
 let configLoadedCallbacks = [];
 
-// Load configurations
+// load configurations
 fetch('config/windowConfig.json')
     .then(response => response.json())
     .then(data => {
